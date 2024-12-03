@@ -3,7 +3,7 @@ import { Pressable, View, Text, StyleSheet } from "react-native";
 export function FormButton({ type, onPressAction, text }) {
 
     return (
-        <Pressable className='flex-1 flex-row justify-center' onPress={() => onPressAction()}>
+        <Pressable className='flex flex-row justify-center' onPress={() => onPressAction()}>
             <View 
                 className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center" 
                 style={type === 'primary' ? styles.buttonContainerPrimary : styles.buttonContainerSecondary}>

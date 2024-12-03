@@ -1,26 +1,32 @@
-import React from 'react';
-import { View, TextInput, Button, Text, StyleSheet} from 'react-native';
+import React, { useState} from 'react';
+import { View, TextInput, Button, Text, StyleSheet, Modal} from 'react-native';
 import { Link } from 'expo-router'
 import { useForm, Controller } from 'react-hook-form';
 import { FormButton } from './FormButton';
 import { login } from '../services/usersServ';
 import { useUser } from '../contexts/UserContext';
+import { GenericModal } from './GenericModal';
+import { useModal } from '../hooks/useModal';
 
 export const FormLogin = () => {
   const { control, handleSubmit, formState: { errors } } = useForm();
   const { setUser, clearUser } = useUser()
+  const [textBody, setTextBody] = useState('')
+  const [isOpenModal, openModal, closeModal] = useModal(false)
+
   const onSubmit = async (data) => {
     console.log(data);
     //setError(false)
-    //openModal()
     try {
-        const resp = await login(data)
-        setUser(resp)
-        alert(resp)
+      const resp = await login(data)
+      setUser(resp)
+      alert(resp)
       //closeModal()
       //  navigate(routes.home)
       console.log(resp)
     } catch (error) {
+      setTextBody(error.message)
+        openModal()
         console.error('Error handleLoginSubmit: ', error)
       //  setError(true)
     }
@@ -28,6 +34,7 @@ export const FormLogin = () => {
 
   return (
     <View className='w-full justify-items-center' style={styles.container}>
+      <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody}/>
       <Controller
         name="email"
         control={control}
