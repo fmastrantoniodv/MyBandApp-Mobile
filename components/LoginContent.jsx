@@ -1,8 +1,8 @@
 import React from 'react'
-import { ScrollView, Text, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { Screen } from './Screen'
 import { Stack } from 'expo-router'
-import { FormCardLogin } from './FormCardLogin'
+import { FormLogin } from './FormLogin'
 
 export function LoginContent() {
   return (
@@ -16,7 +16,7 @@ export function LoginContent() {
         style={styles.container} 
         contentContainerStyle={styles.contentContainer}
         >
-        <FormCardLogin />
+        <FormLogin />
       </ScrollView>
     </Screen>
   )
@@ -24,10 +24,11 @@ export function LoginContent() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#262529',
   },
   contentContainer: {
+    flex: 1,
     alignItems: 'center',
+    justifyContent: 'center'
   }
 })

@@ -30,7 +30,8 @@
     ],
     "extra": {
       "ENDPOINT_BACKEND": "http://localhost:3001",
-      "ENV_CODE":"DEV"
+      "ENV_CODE":"DEV",
+      "LOCAL_ENDPOINT_BACKEND": "http://10.0.2.2:3001"
     }
   }
 }

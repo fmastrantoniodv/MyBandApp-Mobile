@@ -4,16 +4,22 @@ export function FormButton({ type, onPressAction, text }) {
 
     return (
         <Pressable className='flex flex-row justify-center' onPress={() => onPressAction()}>
-            <View 
-                className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center" 
-                style={type === 'primary' ? styles.buttonContainerPrimary : styles.buttonContainerSecondary}>
-                    <Text 
-                        className='text-2xl font-semibold'
-                        style={type === 'primary' ? styles.textPrimary : styles.textSecondary}
-                        >
+            {({ pressed }) => (
+                <View 
+                    className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center" 
+                    style={[
+                        type === 'primary' ? styles.buttonContainerPrimary : styles.buttonContainerSecondary,
+                        pressed && styles.pressedStyle,
+                        ]}>
+                        <Text 
+                            className='text-2xl font-semibold'
+                            style={type === 'primary' ? styles.textPrimary : styles.textSecondary}
+                            >
                             {text}
-                    </Text>
-            </View>
+                        </Text>
+                </View>
+            )   
+            }
         </Pressable>
     )
   }
@@ -33,6 +39,9 @@ export function FormButton({ type, onPressAction, text }) {
     },
     textSecondary: {
         color: '#203875',
-    }
+    },
+    pressedStyle: {
+        opacity: 0.7,
+      },
 
   })

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Pressable, Text, StyleSheet, Modal} from 'react-native';
+import { View, Text, StyleSheet, Modal} from 'react-native';
 import { FormButton } from './FormButton';
 
 

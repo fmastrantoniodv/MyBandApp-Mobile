@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Constants from 'expo-constants';
-const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
+const { ENDPOINT_BACKEND, LOCAL_ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 
 export const createNewUser = async (data) => {
     try {
@@ -21,7 +21,7 @@ export const createNewUser = async (data) => {
 
 export const login = async (data) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/login`
+        const url = `${LOCAL_ENDPOINT_BACKEND}/api/users/login`
         const body = {
             "email": data.email,
             "password": data.password
@@ -32,7 +32,6 @@ export const login = async (data) => {
         console.log('response=',response)
         return response.data
     } catch (error) {
-        console.log(error)
         throw error
     }
 }
