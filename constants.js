@@ -16,7 +16,7 @@ export const inputsLogin = [
             value: true,
             message: 'Por favor ingrese su correo electrónico'
         },
-        validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
+        pattern: { value: emailRegex, message: 'Formato de email inválido' }
     },
     {
         title: 'Contraseña',
@@ -25,8 +25,10 @@ export const inputsLogin = [
         required: {
             value: true,
             message: 'Por favor ingrese su contraseña'
-        }
+        },
+        pattern: { value: passwordRegex, message: 'Formato de contraseña inválido' }
     }
+
 ];
 
 export const inputsRegister = [
@@ -47,7 +49,7 @@ export const inputsRegister = [
             value: true,
             message: 'El campo correo electrónico no puede ser vacío'
         },
-        validate: (value) => emailRegex.test(value) || 'El formato del correo electrónico no es válido'
+        pattern: { value: emailRegex, message: 'Formato de email inválido' }
     },
     {
         title: 'Repita correo electrónico',
@@ -57,7 +59,7 @@ export const inputsRegister = [
             value: true,
             message: 'El campo correo electrónico no puede ser vacío'
         },
-        validate: (value, watch) => value === watch('email') || 'Los correos electrónicos no coinciden'
+        pattern: { value: emailRegex, message: 'Formato de email inválido' }
     },
     {
         title: 'Contraseña',
@@ -67,7 +69,7 @@ export const inputsRegister = [
             value: true,
             message: 'El campo contraseña no puede ser vacío'
         },
-        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres'
+        pattern: { value: passwordRegex, message: 'Formato de contraseña inválido' }
     },
     {
         title: 'Repita Contraseña',
@@ -77,7 +79,7 @@ export const inputsRegister = [
             value: true,
             message: 'Campo obligatorio'
         },
-        validate: (value, watch) => value === watch('password') || 'Las contraseñas no coinciden'
+        pattern: { value: passwordRegex, message: 'Formato de contraseña inválido' }
     },
     {
         title: 'Suscripción',

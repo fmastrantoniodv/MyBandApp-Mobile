@@ -1,10 +1,13 @@
 import { View } from "react-native";
 import { StatusBar } from 'expo-status-bar'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
-export function Screen({ children }) {
+export function Screen({ children, withHeader }) {
+    const insets = useSafeAreaInsets()
     return (
         <View
-            className='flex-1 bg-grey mt-4'
+            style={{paddingTop: !withHeader && insets.top}}
+            className='flex-1 bg-grey'
         >
             <StatusBar style="dark" />
             {children}

@@ -1,23 +1,21 @@
 import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Screen } from './Screen'
 import { Stack } from 'expo-router'
 import { FormLogin } from './FormLogin'
 
 export function LoginContent() {
+  const showHeader = false
   return (
-    <Screen>
+    <Screen withHeader={showHeader}>
       <Stack.Screen 
           options={{
-            headerShown: false
+            headerShown: showHeader
           }}
       />
-      <ScrollView 
-        style={styles.container} 
-        contentContainerStyle={styles.contentContainer}
-        >
+      <View style={styles.container} >
         <FormLogin />
-      </ScrollView>
+      </View>
     </Screen>
   )
 }
@@ -25,8 +23,6 @@ export function LoginContent() {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#262529',
-  },
-  contentContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'

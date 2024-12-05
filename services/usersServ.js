@@ -20,6 +20,7 @@ export const createNewUser = async (data) => {
 }
 
 export const login = async (data) => {
+    //if(!data.email || !data.password) throw new Error('Campos vacíos')
     try {
         const url = `${LOCAL_ENDPOINT_BACKEND}/api/users/login`
         const body = {
@@ -28,11 +29,15 @@ export const login = async (data) => {
         }
         console.log('url', url)
         console.log('body', body)
-        const response = await axios.post(url, body)
+        const response = await axios.post(url, body, {timeout: 5000})
         console.log('response=',response)
         return response.data
     } catch (error) {
-        throw error
+        console.log('login.error=',error)
+        return { 
+            errorCode: 'NETWORK_ERROR',
+            errorMessage: 'No se pudo conectar con el servidor'
+        }
     }
 }
 
