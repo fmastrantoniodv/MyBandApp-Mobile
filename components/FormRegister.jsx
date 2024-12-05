@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useRef, useState} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ export const FormRegister = () => {
   const [selectedValue, setSelectedValue] = useState('')
   const [error, setError] = useState(false)
   const router = useRouter()
+  const inputRefs = useRef({});
 
   const onSubmit = async (data) => {
     console.log('onSubmit.data=',data);
@@ -61,15 +62,34 @@ export const FormRegister = () => {
           textBody={modalTextBody}
           positiveBtn={error ? closeModal : onAcept}
         />
-        {inputsRegister.filter((value)=> value.type !== 'dropdown').map((input, index)=>(
-          <FormInput
-            key={index}
-            inputObj={input} 
-            control={control}
-            errors={errors}
-          />
-          ))}
-          <FormSelector planList={planList} titleSelector={'Plan'} selectedValue={selectedValue} onSelect={setSelectedValue}/>
+        {inputsRegister.map((input, index)=>{
+          const isLastInput = index === inputsRegister.length - 1;
+          if(input.type !== 'dropdown'){
+            return (
+              <FormInput
+                key={index}
+                inputObj={input} 
+                control={control}
+                errors={errors}
+                inputRefs={inputRefs}
+                isLastInput={isLastInput}
+                refInput={(ref) => (inputRefs.current[input.name] = ref)}
+                returnKeyType={isLastInput ? 'done' : 'next'}
+                onSubmitEditing={() => {
+                  if (!isLastInput) {
+                    const nextInput = inputsRegister[index + 1].name;
+                    inputRefs.current[nextInput]?.focus();
+                  } else {
+                    handleSubmit(onSubmit)();
+                  }
+                }}
+                />
+            )
+          }else{
+            return <FormSelector key={index} planList={input.options} titleSelector={input.title} selectedValue={selectedValue} onSelect={setSelectedValue}/>
+          }
+        })
+        }
         <FormButton text="Crear usuario" type="primary" disable={isValid && selectedValue !== '' ? false : true} onPressAction={handleSubmit(onSubmit)}/>
         <FormButton text="Volver" type="secondary" onPressAction={() => {router.push('/')}} />
       </View>

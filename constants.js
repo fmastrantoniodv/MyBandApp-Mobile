@@ -82,8 +82,8 @@ export const inputsRegister = [
         pattern: { value: passwordRegex, message: 'Formato de contraseña inválido' }
     },
     {
-        title: 'Suscripción',
-        name: 'suscription',
+        title: 'Plan',
+        name: 'plan',
         type: 'dropdown',
         options: planList
     }

@@ -2,7 +2,14 @@ import React from 'react';
 import { TextInput, Text, StyleSheet} from 'react-native';
 import { Controller } from 'react-hook-form';
 
-export const FormInput = ({inputObj, control, errors}) => {
+export const FormInput = ({
+  inputObj, 
+  control, 
+  errors, 
+  refInput, 
+  returnKeyType, 
+  onSubmitEditing
+}) => {
   return ( 
     <>
       <Text className='text-xl font-semibold'>{inputObj.title}</Text>
@@ -23,6 +30,9 @@ export const FormInput = ({inputObj, control, errors}) => {
             value={value}
             secureTextEntry={inputObj.type === 'password' ? true : false}
             className='bg-gray-200 border-0'
+            ref={refInput}
+            returnKeyType={returnKeyType}
+            onSubmitEditing={onSubmitEditing}
           />
         </>
       )}
