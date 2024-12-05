@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
   container: { 
     padding: 20
   },
-  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 10, height: '50' },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 10, height: '50', fontSize: 16 },
   error: { color: 'red', marginBottom: 10 },
 });

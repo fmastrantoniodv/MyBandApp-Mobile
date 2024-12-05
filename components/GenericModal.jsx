@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Modal} from 'react-native';
 import { FormButton } from './FormButton';
 
 
-export const GenericModal = ({ openModal, closeModal, textBody }) => {
+export const GenericModal = ({ openModal, closeModal, positiveBtn, textBody }) => {
  
     return (
         <Modal
@@ -16,7 +16,7 @@ export const GenericModal = ({ openModal, closeModal, textBody }) => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>{textBody}</Text>
-              <FormButton type='primary' onPressAction={closeModal} text='Aceptar'></FormButton>
+              <FormButton type='primary' onPressAction={positiveBtn} text='Aceptar'></FormButton>
             </View>
           </View>
         </Modal>

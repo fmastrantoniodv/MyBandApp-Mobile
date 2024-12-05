@@ -1,35 +1,37 @@
 import axios from 'axios'
 import Constants from 'expo-constants';
-const { ENDPOINT_BACKEND, LOCAL_ENDPOINT_BACKEND } = Constants.expoConfig.extra;
+const { ENDPOINT_BACKEND, TIMEOUT_SERVICES } = Constants.expoConfig.extra;
 
-export const createNewUser = async (data) => {
+export const createNewUser = async (body) => {
     try {
         const url = `${ENDPOINT_BACKEND}/api/users/register`
-        const body = {
-            "usrName": data.name,
-            "email": data.email,
-            "password": data.password,
-            "plan": data.suscription
-        }
-        const response = await axios.post(url, body)
+        console.log('url=', url)
+        console.log('timeout=', TIMEOUT_SERVICES)
+        console.log('body=', body)
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
+        console.log('response=',response)
         return response.data
     } catch (error) {
-        console.log(error)
-        throw error
+        console.log('register.error.status=',error.status)
+        console.log('register.error.body=',error.code)
+        return { 
+            errorCode: error.code,
+            errorMessage: error.message
+        }
     }
 }
 
 export const login = async (data) => {
-    //if(!data.email || !data.password) throw new Error('Campos vacíos')
+    if(!data.email || !data.password) throw new Error('Campos vacíos')
     try {
-        const url = `${LOCAL_ENDPOINT_BACKEND}/api/users/login`
+        const url = `${ENDPOINT_BACKEND}/api/users/login`
         const body = {
             "email": data.email,
             "password": data.password
         }
         console.log('url', url)
         console.log('body', body)
-        const response = await axios.post(url, body, {timeout: 5000})
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
         console.log('response=',response)
         return response.data
     } catch (error) {
@@ -43,7 +45,7 @@ export const login = async (data) => {
 
 export const getUserFavsServ = async (userId) => {
     return await axios.
-    get(`${ENDPOINT_BACKEND}/api/users/getUserFavsList/${userId}`)
+    get(`${ENDPOINT_BACKEND}/api/users/getUserFavsList/${userId}`, TIMEOUT_SERVICES)
     .then((response) => {
         const data = response
         return data
@@ -60,7 +62,7 @@ export const updateFav = async (userId, sampleId, action, callback) => {
             "sampleId": sampleId,
             "actionCode": action
         }
-        const response = await axios.post(url, body)
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
         callback()
         return response
     } catch (error) {
@@ -76,7 +78,7 @@ export const updatePlan = async (userId, newPlan) => {
             "userId": userId,
             "newPlan": newPlan
         }
-        const response = await axios.post(url, body)
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
         return response
     } catch (error) {
         console.log(error)
@@ -92,7 +94,7 @@ export const changePassService = async (userEmail, pass, newPass) => {
             "password": pass,
             "newPass": newPass
         }
-        const response = await axios.post(url, body)
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
         return response
     } catch (error) {
         console.log(error)
@@ -107,7 +109,7 @@ export const updatePassService = async (userEmail, newPass) => {
             "email": userEmail,
             "newPass": newPass
         }
-        const response = await axios.post(url, body)
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
         return response
     } catch (error) {
         console.log(error)
@@ -121,7 +123,7 @@ export const sendVerifyCode = async (userEmail) => {
         const body = {
             "email": userEmail
         }
-        const response = await axios.post(url, body)
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
         return response
     } catch (error) {
         console.log(error)
@@ -136,7 +138,7 @@ export const checkVerifyCode = async (userEmail, verificationCode) => {
             "email": userEmail,
             "verificationCode": parseInt(verificationCode)
         }
-        const response = await axios.post(url, body)
+        const response = await axios.post(url, body, TIMEOUT_SERVICES)
         return response
     } catch (error) {
         console.log(error)

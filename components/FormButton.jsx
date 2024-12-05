@@ -1,18 +1,19 @@
 import { Pressable, View, Text, StyleSheet } from "react-native";
 
-export function FormButton({ type, onPressAction, text }) {
+export function FormButton({ type, onPressAction, text, disable }) {
 
     return (
-        <Pressable className='flex flex-row justify-center' onPress={() => onPressAction()}>
+        <Pressable className='flex flex-row justify-center' onPress={disable ? null : () => onPressAction()}>
             {({ pressed }) => (
                 <View 
                     className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center" 
                     style={[
                         type === 'primary' ? styles.buttonContainerPrimary : styles.buttonContainerSecondary,
                         pressed && styles.pressedStyle,
+                        disable && styles.disableStyle
                         ]}>
                         <Text 
-                            className='text-2xl font-semibold'
+                            className='text-xl font-medium'
                             style={type === 'primary' ? styles.textPrimary : styles.textSecondary}
                             >
                             {text}
@@ -43,5 +44,7 @@ export function FormButton({ type, onPressAction, text }) {
     pressedStyle: {
         opacity: 0.7,
       },
-
+    disableStyle: {
+        opacity: 0.7,
+    }
   })

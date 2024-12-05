@@ -29,9 +29,10 @@
       "expo-router"
     ],
     "extra": {
-      "ENDPOINT_BACKEND": "http://localhost:3001",
+      "ENDPOINT_BACKEND": "http://10.0.2.2:3001",
       "ENV_CODE":"DEV",
-      "LOCAL_ENDPOINT_BACKEND": "http://10.0.2.2:3001"
+      "LOCAL_ENDPOINT_BACKEND": "http://10.0.2.2:3001",
+      "TIMEOUT_SERVICES": { "timeout": 15000 }
     }
   }
 }

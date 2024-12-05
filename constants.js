@@ -1,10 +1,10 @@
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const passwordRegex = /^[a-zA-Z0-9]{8,}$/
 export const numberRegex = /^[0-9]{8}$/
-export const suscriptions = [
-    { "key": "free", "value": "Free" },
-    { "key": "trial", "value": "Trial" },
-    { "key": "pro", "value": "Pro" }
+export const planList = [
+    { "label": "Free", "value": "free" },
+    { "label": "Trial", "value": "trial" },
+    { "label": "Pro" , "value": "pro" }
 ]
 
 export const inputsLogin = [
@@ -85,7 +85,7 @@ export const inputsRegister = [
         title: 'Suscripción',
         name: 'suscription',
         type: 'dropdown',
-        options: suscriptions
+        options: planList
     }
 ]
 
