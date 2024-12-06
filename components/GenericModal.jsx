@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Modal} from 'react-native';
-import { FormButton } from './FormButton';
+import { FormButton } from './Form/FormButton';
 
 
 export const GenericModal = ({ openModal, closeModal, positiveBtn, textBody }) => {

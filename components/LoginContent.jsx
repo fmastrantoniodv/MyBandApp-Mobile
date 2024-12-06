@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Screen } from './Screen'
 import { Stack } from 'expo-router'
-import { FormLogin } from './FormLogin'
+import { FormLogin } from './Form/FormLogin'
 
 export function LoginContent() {
   const showHeader = false

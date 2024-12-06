@@ -1,10 +1,8 @@
 import React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import { Stack } from 'expo-router'
 import { Screen } from '../../components/Screen'
-import { Link } from 'expo-router'
-import { LoginContent } from '../../components/LoginContent'
-import { FormRegister } from '../../components/FormRegister'
+import { FormRegister } from '../../components/Form/FormRegister'
 
 export default function Register() {
     const showHeader = false
