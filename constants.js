@@ -7,6 +7,17 @@ export const planList = [
     { "label": "Pro" , "value": "pro" }
 ]
 
+export const inputSearchParams = {
+    title: 'Buscar',
+    name: 'searchInput',
+    type: 'text',
+    required: {
+        value: false,
+        message: ''
+    }
+} 
+
+
 export const inputsLogin = [
     {
         title: 'Correo electrónico',

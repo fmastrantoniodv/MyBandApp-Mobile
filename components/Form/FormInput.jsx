@@ -12,7 +12,9 @@ export const FormInput = ({
 }) => {
   return ( 
     <>
-      <Text className='text-xl font-semibold'>{inputObj.title}</Text>
+    {
+      inputObj.name !== 'searchInput' && <Text className='text-xl font-semibold'>{inputObj.title}</Text>
+    }
       <Controller
         name={inputObj.name}
         control={control}

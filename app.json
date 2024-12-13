@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "my-band-app-mobile",
-    "slug": "my-band-app-mobile",
+    "slug": "My Band App",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,7 +29,7 @@
       "expo-router"
     ],
     "extra": {
-      "ENDPOINT_BACKEND": "http://10.0.2.2:3001",
+      "ENDPOINT_BACKEND": "https://mybandapp-backend.onrender.com",
       "ENV_CODE":"DEV",
       "LOCAL_ENDPOINT_BACKEND": "http://10.0.2.2:3001",
       "TIMEOUT_SERVICES": { "timeout": 15000 }

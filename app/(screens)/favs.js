@@ -2,19 +2,19 @@ import { View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import { Screen } from '../../components/Screen'
-import { ButtonGoFavs} from '../../components/CardFavs'
-import CardLibs from '../../components/CardLibs'
-import { getCollections } from '../../services/collectionsServ'
+import CardFavs from '../../components/CardFavs'
 import { getUserFavsServ } from '../../services/usersServ'
 import { useModal } from '../../hooks/useModal'
 import { Loader } from '../../components/Loader'
 import { GenericModal } from '../../components/GenericModal'
+import { useUser } from '../../contexts/UserContext'
 
-export default function Home() {
+export default function Favs() {
     const [loading, setLoading] = useState(false)
-    const [collections, setCollections] = useState()
+    const [favs, setFavs] = useState()
     const [textBody, setTextBody] = useState('')
     const [isOpenModal, openModal, closeModal] = useModal(false)
+    const { user } = useUser()
     
     useEffect(() => {
       onLoad()
@@ -23,10 +23,10 @@ export default function Home() {
     const onLoad = async () => {
         setLoading(true)
         try {
-            const respCollections = await getCollections('pro')
-            console.log('respCollections: ', respCollections)
-            if(respCollections.errorCode) throw new Error(respCollections.errorMessage)
-            setCollections(respCollections)
+            const respFavs = await getUserFavsServ(user.id)
+            if(respFavs.errorCode) throw new Error(respFavs.errorMessage)
+            setFavs(respFavs.data)
+            setLoading(false)
         } catch (error) {
             console.log('collections.error=', error)
             setLoading(false)
@@ -42,8 +42,7 @@ export default function Home() {
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody}/>
             <ScrollView contentContainerStyle={styles.container}>
-                <ButtonGoFavs />
-                <CardLibs collections={collections}/>
+                <CardFavs favs={favs}/>
             </ScrollView>
         </Screen>
     )

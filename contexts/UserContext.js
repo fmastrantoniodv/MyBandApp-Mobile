@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
         try {
           await AsyncStorage.setItem('user', JSON.stringify(userData));
           console.log('Datos guardados');
-          //loadUserData()
+          loadUserData()
         } catch (error) {
           console.error('Error al guardar datos', error);
         }

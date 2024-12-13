@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Constants from 'expo-constants';
-const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
+const { ENDPOINT_BACKEND, TIMEOUT_SERVICES } = Constants.expoConfig.extra;
 
 export const getCollections = async (plan) => {
     try {

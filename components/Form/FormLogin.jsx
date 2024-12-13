@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Link, useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
@@ -19,6 +19,8 @@ export const FormLogin = () => {
   const [isOpenModal, openModal, closeModal] = useModal(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const inputRefs = useRef({});
+
   const onSubmit = async (data) => {
     setLoading(true)
     try {
@@ -38,25 +40,39 @@ export const FormLogin = () => {
   };
 
   return (
-  <View className="w-10/12 h-300px bg-white rounded-lg border border-spacing mt-10 p-2 flex-row flex-wrap justify-center">
-    <MbaLogoSvg width={250} height={150}/>
-    <Text className='text-3xl font-semibold' >Iniciar sesión</Text>
-      <Loader loading={loading} />
-      <View className='w-full justify-items-center' style={styles.container}>
-        <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody}/>
-        {inputsLogin.filter((value)=> value.type !== 'dropdown').map((input, index)=>(
-          <FormInput
-            key={index}
-            inputObj={input} 
-            control={control}
-            errors={errors}
-          />
-          ))}
-        <Link href="/home" className='text-black text-center text-lg mb-7'>Olvide mi contraseña</Link>
-        <FormButton text="Ingresar" type="primary" onPressAction={handleSubmit(onSubmit)} />
-        <FormButton text="Registrarse" type="secondary" onPressAction={() => {router.push('/register')}} />
+    <View className="w-10/12 h-300px bg-white rounded-lg border border-spacing mt-10 p-2 flex-row flex-wrap justify-center">
+      <MbaLogoSvg width={250} height={150}/>
+      <Text className='text-3xl font-semibold' >Iniciar sesión</Text>
+        <Loader loading={loading} />
+        <View className='w-full justify-items-center' style={styles.container}>
+          <GenericModal openModal={isOpenModal} positiveBtn={closeModal} closeModal={closeModal} textBody={textBody}/>
+          {inputsLogin.map((input, index)=>{
+            const isLastInput = index === inputsLogin.length - 1;
+            return (
+              <FormInput
+              key={index}
+              inputObj={input} 
+              control={control}
+              errors={errors}
+              inputRefs={inputRefs}
+              isLastInput={isLastInput}
+              refInput={(ref) => (inputRefs.current[input.name] = ref)}
+              returnKeyType={isLastInput ? 'done' : 'next'}
+              onSubmitEditing={() => {
+                if (!isLastInput) {
+                  const nextInput = inputsLogin[index + 1].name;
+                  inputRefs.current[nextInput]?.focus();
+                } else {
+                  handleSubmit(onSubmit)();
+                }
+              }}
+              />
+            )})}
+          <Link href="/home" className='text-black text-center text-lg mb-7'>Olvide mi contraseña</Link>
+          <FormButton text="Ingresar" type="primary" onPressAction={handleSubmit(onSubmit)} />
+          <FormButton text="Registrarse" type="secondary" onPressAction={() => {router.push('/register')}} />
+        </View>
       </View>
-    </View>
   );
 };
 
