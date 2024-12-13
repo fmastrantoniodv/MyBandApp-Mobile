@@ -23,8 +23,8 @@ export function IconButton({ onPressAction, disable, children }) {
     )
   }
 
-export const FavButton = () => {
-    return <IconButton onPressAction={() => console.log('favPressed')}>
+export const FavButton = ({ onPressAction }) => {
+    return <IconButton onPressAction={() => onPressAction()}>
         <FavIcon width={25} height={25} />
     </IconButton>
 }

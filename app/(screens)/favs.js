@@ -36,13 +36,16 @@ export default function Favs() {
         setLoading(false)
     }
 
+    const deleteFavFromList = (itemId) => {
+        setFavs(favs.filter((fav)=>fav.id !== itemId))
+    } 
 
     return (
         <Screen withHeader={true}>
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody}/>
             <ScrollView contentContainerStyle={styles.container}>
-                <CardFavs favs={favs}/>
+                <CardFavs favs={favs} onDeleteFav={deleteFavFromList}/>
             </ScrollView>
         </Screen>
     )
