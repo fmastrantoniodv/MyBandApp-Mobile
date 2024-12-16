@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "my-band-app-mobile",
-    "slug": "My Band App",
+    "slug": "my-band-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,7 +20,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.frankiemybandapp.mybandapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -30,9 +31,15 @@
     ],
     "extra": {
       "ENDPOINT_BACKEND": "https://mybandapp-backend.onrender.com",
-      "ENV_CODE":"DEV",
+      "ENV_CODE": "DEV",
       "LOCAL_ENDPOINT_BACKEND": "http://10.0.2.2:3001",
-      "TIMEOUT_SERVICES": { "timeout": 15000 }
+      "TIMEOUT_SERVICES": 15000,
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d2ccb803-0e91-4884-9481-218a4379438d"
+      }
     }
   }
 }

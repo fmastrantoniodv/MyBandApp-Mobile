@@ -1,15 +1,9 @@
-import axios from 'axios'
-import Constants from 'expo-constants';
-const { ENDPOINT_BACKEND, TIMEOUT_SERVICES } = Constants.expoConfig.extra;
+import httpClient from './httpClient'
 
 export const createNewUser = async (body) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/register`
-        console.log('url=', url)
-        console.log('timeout=', TIMEOUT_SERVICES)
-        console.log('body=', body)
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
-        console.log('response=',response)
+        console.log('[userServ].createNewUser.body=', body)
+        const response = await httpClient.post(`/api/users/register`, body)
         return response.data
     } catch (error) {
         console.log('register.error.status=',error.status)
@@ -24,28 +18,22 @@ export const createNewUser = async (body) => {
 export const login = async (data) => {
     if(!data.email || !data.password) throw new Error('Campos vacíos')
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/login`
         const body = {
             "email": data.email,
             "password": data.password
         }
-        console.log('url', url)
-        console.log('body', body)
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
-        console.log('response=',response)
-        return response.data
+        const response = await httpClient.post(`/api/users/login`, body)
+        console.log('[userServ].login.response=',response)
+        return response
     } catch (error) {
-        console.log('login.error=',error)
-        return { 
-            errorCode: 'NETWORK_ERROR',
-            errorMessage: 'No se pudo conectar con el servidor'
-        }
+        console.log('[userServ].login.error=',error)
+        return error
     }
 }
 
 export const getUserFavsServ = async (userId) => {
-    return await axios.
-    get(`${ENDPOINT_BACKEND}/api/users/getUserFavsList/${userId}`, TIMEOUT_SERVICES)
+    return await httpClient.
+    get(`/api/users/getUserFavsList/${userId}`)
     .then((response) => {
         const data = response
         return data
@@ -56,93 +44,91 @@ export const getUserFavsServ = async (userId) => {
 
 export const updateFav = async (userId, sampleId, action) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/updateFav`
         const body = {
             "userId": userId,
             "sampleId": sampleId,
             "actionCode": action
         }
-        console.log('updateFav.url=', url)
-        console.log('updateFav.body=', body)
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
+        console.log('[userServ].updateFav.body=', body)
+        const response = await httpClient.post(`/api/users/updateFav`, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error('[userServ].updateFav.error',error)
         throw error
     }
 }
 
 export const updatePlan = async (userId, newPlan) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/updatePlan`
         const body = {
             "userId": userId,
             "newPlan": newPlan
         }
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
+        console.log('[userServ].updatePlan.body=', body)
+        const response = await httpClient.post(`/api/users/updatePlan`, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error('[userServ].updatePlan.error=', error)
         throw error
     }
 }
 
 export const changePassService = async (userEmail, pass, newPass) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/changePass`
         const body = {
             "email": userEmail,
             "password": pass,
             "newPass": newPass
         }
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
+        console.log('[userServ].changePassService.body=', body)
+        const response = await httpClient.post(`/api/users/changePass`, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error('[userServ].changePassService.error=', error)
         throw error
     }
 }
 
 export const updatePassService = async (userEmail, newPass) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/updatePass`
         const body = {
             "email": userEmail,
             "newPass": newPass
         }
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
+        console.log('[userServ].updatePassService.body=', body)
+        const response = await httpClient.post(`/api/users/updatePass`, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error('[userServ].updatePassService.error=', error)
         throw error
     }
 }
 
 export const sendVerifyCode = async (userEmail) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/sendCodeToMail`
         const body = {
             "email": userEmail
         }
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
+        console.log('[userServ].sendVerifyCode.body=', body)
+        const response = await httpClient.post(`/api/users/sendCodeToMail`, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error('[userServ].sendVerifyCode.error=', error)
         return error.response
     }
 }
 
 export const checkVerifyCode = async (userEmail, verificationCode) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/users/validateCode`
         const body = {
             "email": userEmail,
             "verificationCode": parseInt(verificationCode)
         }
-        const response = await axios.post(url, body, TIMEOUT_SERVICES)
+        console.log('[userServ].checkVerifyCode.body=', body)
+        const response = await httpClient.post(`/api/users/validateCode`, body)
         return response
     } catch (error) {
-        console.log(error)
+        console.error('[userServ].checkVerifyCode.error=', error)
         return error.response
     }
 }

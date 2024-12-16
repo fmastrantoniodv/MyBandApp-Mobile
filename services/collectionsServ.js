@@ -1,13 +1,10 @@
-import axios from 'axios'
-import Constants from 'expo-constants';
-const { ENDPOINT_BACKEND, TIMEOUT_SERVICES } = Constants.expoConfig.extra;
+import httpClient from './httpClient'
 
 export const getCollections = async (plan) => {
     try {
-        const url = `${ENDPOINT_BACKEND}/api/collections/plan/${plan}`
-        const response = await axios.get(url)
+        const response = await httpClient.get(`/api/collections/plan/${plan}`)
         console.log("getCollections: ", response.data)
-        return response.data
+        return response
     } catch (error) {
         console.log(error)
         throw error
