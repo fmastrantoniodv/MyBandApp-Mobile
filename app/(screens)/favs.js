@@ -23,12 +23,13 @@ export default function Favs() {
     const onLoad = async () => {
         setLoading(true)
         try {
-            const respFavs = await getUserFavsServ(user.id)
-            if(respFavs.errorCode) throw new Error(respFavs.errorMessage)
-            setFavs(respFavs.data)
+            if(!user.id) throw new Error('No se encontro id de usuario')
+            const resp = await getUserFavsServ(user.id)
+            if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
+            setFavs(resp)
             setLoading(false)
         } catch (error) {
-            console.log('collections.error=', error)
+            console.log('favs.error=', error)
             setLoading(false)
             setTextBody(error.message)
             openModal()
@@ -43,7 +44,7 @@ export default function Favs() {
     return (
         <Screen withHeader={true}>
             <Loader loading={loading} />
-            <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody}/>
+            <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody} positiveBtn={closeModal}/>
             <ScrollView contentContainerStyle={styles.container}>
                 <CardFavs favs={favs} onDeleteFav={deleteFavFromList}/>
             </ScrollView>

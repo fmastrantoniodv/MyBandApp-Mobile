@@ -26,9 +26,7 @@ export const FormLogin = () => {
     try {
       const resp = await login(data)
       console.log('resp_login: ', resp)
-      if(resp.status !== 200){
-        throw new Error(resp.errorDetail)
-      }
+      if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
       saveUserData(resp)
       setLoading(false)
       router.push('/home')

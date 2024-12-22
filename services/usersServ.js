@@ -4,14 +4,11 @@ export const createNewUser = async (body) => {
     try {
         console.log('[userServ].createNewUser.body=', body)
         const response = await httpClient.post(`/api/users/register`, body)
-        return response.data
+        console.log('[userServ].createNewUser.response=',response)
+        return response
     } catch (error) {
-        console.log('register.error.status=',error.status)
-        console.log('register.error.body=',error.code)
-        return { 
-            errorCode: error.code,
-            errorMessage: error.message
-        }
+        console.log('[userServ].createNewUser.error=',error)
+        return error
     }
 }
 
@@ -32,14 +29,14 @@ export const login = async (data) => {
 }
 
 export const getUserFavsServ = async (userId) => {
-    return await httpClient.
-    get(`/api/users/getUserFavsList/${userId}`)
-    .then((response) => {
-        const data = response
-        return data
-    }).catch((e) => {
-        return e.response
-    })
+    try {
+        const response = await httpClient.get(`/api/users/getUserFavsList/${userId}`)
+        console.log('[userServ].getUserFavsServ.response=',response)
+        return response
+    } catch (error) {
+        console.log('[userServ].getUserFavsServ.error=',error)
+        return error
+    }
 }
 
 export const updateFav = async (userId, sampleId, action) => {

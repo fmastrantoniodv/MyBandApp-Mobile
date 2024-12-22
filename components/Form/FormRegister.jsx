@@ -33,14 +33,14 @@ export const FormRegister = () => {
     try {
       const resp = await createNewUser(body)
       console.log('resp_register: ', resp)
-      if(resp.errorCode) throw new Error(resp)
+      if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
       setLoading(false)
       setModalTextBody('¡Usuario creado con exito!')
       openModal()
     } catch (error) {
       console.log('[FormRegister].[onSubmit].catch=', error)
       setError(true)
-      setModalTextBody('Hubo un error')
+      setModalTextBody(error.message)
       setLoading(false)
       openModal()
     }

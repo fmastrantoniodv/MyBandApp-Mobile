@@ -5,12 +5,13 @@ import { FormInput } from './Form/FormInput'
 import { useForm } from 'react-hook-form';
 import arrowIcon from '../assets/img/arrow.png'
 import Constants from 'expo-constants';
+import { useRouter } from 'expo-router'
 const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 
 export default function CardLibs({ collections }) {
     const { control, handleSubmit, formState: { errors, isValid } } = useForm();
     const inputRef = useRef(null);
-
+    
     const onSubmit = async (data) =>{
         console.log('onSubmit.data', data)
     }
@@ -43,8 +44,9 @@ export default function CardLibs({ collections }) {
 
 function ItemLib({ libData }) {
     const srcImg = `${ENDPOINT_BACKEND}/api/collections/src/${libData.collectionCode}`
+    const router = useRouter()
     return(
-        <Pressable>
+        <Pressable onPress={() => {router.push(`/libDetail/${libData.collectionCode}`)}} >
             {({ pressed }) => (
             <View 
                 className='flex-row border-black border-2 w-12/12 rounded-lg justify-center p-3 items-center'
