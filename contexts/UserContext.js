@@ -5,7 +5,7 @@ import { getUserFavsServ } from '../services/usersServ'
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [sessionState, setSessionState] = useState(false)
+    const [sessionState, setSessionState] = useState()
     const [playingSample, setPlayingSample] = useState(null)
     const [favs, setFavs] = useState()
     const [user , setUser] = useState({
@@ -120,6 +120,7 @@ export const UserProvider = ({ children }) => {
     }
 
     useEffect(()=>{
+      console.log('[UserContext.js].[useEffect].user', user)
       if(user){
           console.log('UserProvider.useEffect.user.id=', user.id)
           setSessionState(true)

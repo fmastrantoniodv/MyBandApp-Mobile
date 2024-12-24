@@ -3,6 +3,7 @@ import FavIcon from '../assets/img/favIcon.svg'
 import PlayIcon from '../assets/img/playIcon.svg'
 import UnfavIcon from '../assets/img/unFavButtonIcon.svg'
 import PauseIcon from '../assets/img/pauseIcon.svg'
+import CloseIcon from '../assets/img/closeIcon.svg'
 
 export function IconButton({ onPressAction, disable, children }) {
 
@@ -44,6 +45,12 @@ export const PlayButton = ({ onPressAction }) => {
 export const PauseButton = ({ onPressAction }) => {
     return <IconButton onPressAction={() => onPressAction()}>
         <PauseIcon width={25} height={25} />
+    </IconButton>
+}
+
+export const CloseButton = ({ onPressAction }) => {
+    return <IconButton onPressAction={() => onPressAction()}>
+        <CloseIcon width={25} height={25} />
     </IconButton>
 }
 

@@ -22,9 +22,8 @@ export const FormLogin = () => {
   const inputRefs = useRef({});
 
   useEffect(()=>{
-    console.log('[formLogin.jsx].cleanSession')
-    cleanSession()
-  })
+    console.log('[formLogin.jsx].useEffect')
+  }, [])
 
   const onSubmit = async (data) => {
     setLoading(true)
