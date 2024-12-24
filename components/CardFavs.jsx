@@ -11,19 +11,20 @@ import { useUser } from '../contexts/UserContext';
 import { useModal } from '../hooks/useModal';
 import { GenericModal } from './GenericModal';
 
-export default function CardFavs({ favs, onDeleteFav }) {
+export default function CardFavs({ onDeleteFav }) {
     const { control, handleSubmit, formState: { errors, isValid } } = useForm();
     const inputRef = useRef(null);
     const [playingItemId, setPlayingItemId] = useState(null)
     const [isOpenModal, openModal, closeModal] = useModal(false)
-    const { user } = useUser()
+    const { user, getFavs, favs } = useUser()
     const [modalTextBody, setModalTextBody] = useState('')
     const [loading, setLoading] = useState(false)
     const [selectedValue, setSelectedValue] = useState('')
     const [error, setError] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         console.log('[CardFavs].useEffect')
+        getFavs()
     }, [])
 
     const onUnfav = async (itemId) => {
@@ -43,7 +44,6 @@ export default function CardFavs({ favs, onDeleteFav }) {
             openModal()
         }
     }
-
 
     const onSubmit = async (data) =>{
         console.log('onSubmit.data', data)

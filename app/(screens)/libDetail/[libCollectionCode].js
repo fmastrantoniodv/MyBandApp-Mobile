@@ -18,6 +18,7 @@ export default function LibDetail() {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const { libs } = useLibs()
     const { libCollectionCode } = useLocalSearchParams()
+    const { getFavs } = useUser()
     
     useEffect(() => {
         console.log('[LibDetail].useEffect')
@@ -26,8 +27,8 @@ export default function LibDetail() {
 
     const onLoad = async () => {
         setLoading(true)
-        console.log('[libCollectionCode].libCollectionCode=', libCollectionCode)
         setLib(libs.filter(lib => lib.collectionCode === libCollectionCode)[0])
+        await getFavs()
         setLoading(false)
     }
 /*

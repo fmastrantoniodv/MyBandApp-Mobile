@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Link, useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
@@ -14,12 +14,17 @@ import { inputsLogin } from '../../constants';
 
 export const FormLogin = () => {
   const { control, handleSubmit, formState: { errors } } = useForm();
-  const { saveUserData } = useUser()
+  const { saveUserData, cleanSession } = useUser()
   const [textBody, setTextBody] = useState('')
   const [isOpenModal, openModal, closeModal] = useModal(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const inputRefs = useRef({});
+
+  useEffect(()=>{
+    console.log('[formLogin.jsx].cleanSession')
+    cleanSession()
+  })
 
   const onSubmit = async (data) => {
     setLoading(true)

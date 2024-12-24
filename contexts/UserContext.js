@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateFav } from '../services/usersServ';
+import { getUserFavsServ } from '../services/usersServ'
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
@@ -59,6 +60,17 @@ export const UserProvider = ({ children }) => {
             return error
         }
     }
+
+    const getFavs = async () => {
+            try {
+                if(!user.id) return
+                const respFavs= await getUserFavsServ(user.id)
+                if(respFavs.status && respFavs.status !== 200) throw new Error(respFavs.errorDetail);
+                saveFavsData(respFavs)
+            } catch (error) {
+                console.log('favs.error=', error)
+            }
+      }
     
     const loadUserData = async () => {
         try {
@@ -70,14 +82,24 @@ export const UserProvider = ({ children }) => {
           console.error('Error al cargar datos', error);
         }
       };
+
+      const clearFavs = async () => {
+        try {
+          await AsyncStorage.removeItem('favs');
+          setFavs(null); // Limpia el estado local también
+          console.log('Favs eliminados');
+        } catch (error) {
+          console.error('Error al eliminar favs', error);
+        }
+      };
       
     const clearUser = async () => {
         try {
           await AsyncStorage.removeItem('user');
           setUser(null); // Limpia el estado local también
-          console.log('Datos eliminados');
+          console.log('info user eliminada');
         } catch (error) {
-          console.error('Error al eliminar datos', error);
+          console.error('Error al eliminar info User', error);
         }
       };
 
@@ -91,16 +113,24 @@ export const UserProvider = ({ children }) => {
       }
     }
 
+    const cleanSession = () => {
+      setSessionState(false)
+      clearFavs()
+      clearUser()
+    }
+
     useEffect(()=>{
-        console.log('UserProvider.useEffect.user.id=', user.id)
-        if(user.id){
-            setSessionState(true)
-            console.log('UserProvider.useEffect.sessionState=', sessionState)
+      if(user){
+          console.log('UserProvider.useEffect.user.id=', user.id)
+          setSessionState(true)
+          console.log('UserProvider.useEffect.sessionState=', sessionState)
+        }else{
+          cleanSession()
         }
     }, [user])
 
     return (
-        <UserContext.Provider value={{ user, saveUserData, clearUser, setPlayingSample, playingSample, sessionState, favs, saveFavsData, isFav }}>
+        <UserContext.Provider value={{ user, saveUserData, clearUser, setPlayingSample, playingSample, sessionState, favs, saveFavsData, isFav, getFavs, cleanSession }}>
             {children}
         </UserContext.Provider>
     );

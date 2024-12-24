@@ -4,6 +4,7 @@ import MbaLogoSvg from '../assets/img/logo.svg'
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { UserProvider } from '../contexts/UserContext';
 import { LibsProvider } from "../contexts/LibContext";
+//import { MenuComponent } from "../components/MenuComponent";
       
 export default function Layout() {
     return (
@@ -16,6 +17,8 @@ export default function Layout() {
                                 headerStyle: { backgroundColor: "white"},
                                 headerTintColor: "black",
                                 headerTitle: props => <MbaLogoSvg width={70} height={70}/>,
+                                headerTitleAlign: 'center',
+  //                              headerRight: props => <MenuComponent/>
                             }}
                         />
                     </View>

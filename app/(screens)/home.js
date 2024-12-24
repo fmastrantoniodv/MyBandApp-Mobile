@@ -5,19 +5,17 @@ import { Screen } from '../../components/Screen'
 import { ButtonGoFavs} from '../../components/CardFavs'
 import CardLibs from '../../components/CardLibs'
 import { getCollections } from '../../services/collectionsServ'
-import { getUserFavsServ } from '../../services/usersServ'
 import { useModal } from '../../hooks/useModal'
 import { Loader } from '../../components/Loader'
 import { GenericModal } from '../../components/GenericModal'
 import { useLibs } from '../../contexts/LibContext'
-import { useUser } from '../../contexts/UserContext'
+import { Stack } from 'expo-router'
 
 export default function Home() {
     const [loading, setLoading] = useState(false)
     const [textBody, setTextBody] = useState('')
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const { saveLibsData, libs,  } = useLibs()
-    const { user, favs, saveFavsData } = useUser()
 
     useEffect(() => {
       onLoad()
@@ -26,7 +24,6 @@ export default function Home() {
     const onLoad = async () => {
         setLoading(true)
         try {
-            await getFavs()
             await getLibs()
         } catch (error) {
             console.log('collections.error=', error)
@@ -51,22 +48,14 @@ export default function Home() {
         }
     }
 
-    const getFavs = async () => {
-        try {
-            if(!user.id) return
-            const respFavs= await getUserFavsServ(user.id)
-            if(respFavs.status && respFavs.status !== 200) throw new Error(respFavs.errorDetail)            
-            saveFavsData(respFavs)
-        } catch (error) {
-            console.log('favs.error=', error)
-            setLoading(false)
-            setTextBody(error.message)
-            openModal()
-        }
-    }
-
     return (
         <Screen withHeader={true}>
+            <Stack.Screen 
+                options={{
+                    headerShown: true,
+                    headerBackVisible: false
+                }}
+            />
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody}/>
             <ScrollView contentContainerStyle={styles.container}>
