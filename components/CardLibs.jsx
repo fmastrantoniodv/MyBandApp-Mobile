@@ -1,5 +1,5 @@
 import { inputSearchParams } from '../constants'
-import { cloneElement, useRef } from 'react';
+import { useRef } from 'react';
 import { View, Text, Image, Pressable, StyleSheet } from 'react-native'
 import { FormInput } from './Form/FormInput'
 import { useForm } from 'react-hook-form';

@@ -13,12 +13,12 @@ import Constants from 'expo-constants';
 import { useLibs } from '../contexts/LibContext';
 const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 
-export default function CardLibDetail({ libData, onDeleteFav }) {
+export default function CardLibDetail({ libData }) {
     const { control, handleSubmit, formState: { errors, isValid } } = useForm();
     const inputRef = useRef(null);
     const [playingItemId, setPlayingItemId] = useState(null)
     const [isOpenModal, openModal, closeModal] = useModal(false)
-    const { user,  favs, isFav  } = useUser()
+    const { favs, isFav, updateFavFunc } = useUser()
     const [modalTextBody, setModalTextBody] = useState('')
     const [loading, setLoading] = useState(false)
     const [selectedValue, setSelectedValue] = useState('')
@@ -30,23 +30,31 @@ export default function CardLibDetail({ libData, onDeleteFav }) {
     }, [libData])
 
     const onUnfav = async (itemId) => {
-        try {
-            const resUnFavServ = await updateFav(user.id, itemId, 'UNFAV')
-            console.log('resUnFavServ: ', resUnFavServ)
-            if(resUnFavServ.errorCode) throw new Error(resUnFavServ)
-            setLoading(false)
-            setModalTextBody('¡Favorito descartado!')
-            onDeleteFav(itemId)
-            openModal()
-        } catch (error) {
-            console.log('[CardFavs].[onUnfav].catch=', error)
+        console.log('[CardLibDetail.jsx].onUnfav.itemId=', itemId)
+        const resUnFav = await updateFavFunc(itemId, 'UNFAV', null)
+        console.log('onUnfav: ', resUnFav)
+        setLoading(false)
+        if(resUnFav !== 'SUCCESS'){
             setError(true)
             setModalTextBody('Hubo un error')
-            setLoading(false)
-            openModal()
+            openModal() 
         }
     }
 
+    const onFav = async (itemId, itemObj) => {
+        console.log(`[CardLibDetail.jsx].onfav.itemId=${itemId}`)
+        itemObj.collectionName = libData.collectionName
+        console.log('[CardLibDetail.jsx].onfav.itemObj: ', itemObj)
+        const resFav = await updateFavFunc(itemId, 'FAV', itemObj)
+        console.log('[CardLibDetail.jsx].onFav: ', resFav)
+        console.log('[CardLibDetail.jsx].onFav.updatedFavs=', favs)
+        setLoading(false)
+        if(resFav !== 'SUCCESS'){
+            setError(true)
+            setModalTextBody('Hubo un error')
+            openModal() 
+        }
+    }
 
     const onSubmit = async (data) =>{
         console.log('onSubmit.data', data)
@@ -106,11 +114,12 @@ export default function CardLibDetail({ libData, onDeleteFav }) {
                     return <SampleItem 
                                 key={sample.id} 
                                 sampleData={sample}
-                                isFav={isFav(sample.id)}
+                                isFav={favs && isFav(sample.id)}
+                                onUnfav={() => onUnfav(sample.id)}
+                                onFav={() => onFav(sample.id, sample)}
                                 /**
                                 playing={fav.id === playingItemId} 
                                 onPlaybackAction={() => onPlaybackAction(fav.id)}
-                                onUnfav={() => onUnfav(fav.id)}
                                  */ 
                                 />
                 })
@@ -121,11 +130,11 @@ export default function CardLibDetail({ libData, onDeleteFav }) {
             )
 }
 
-function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, isFav }) {
+function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isFav }) {
     useEffect(()=>{
         console.log('[SampleItem].sampleData=', sampleData)
         console.log('[SampleItem].isFav=', isFav)
-    }, [])
+    }, [isFav])
 
     return(
             <View 
@@ -145,7 +154,7 @@ function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, isFav }) {
                     isFav ?
                     <FavButton onPressAction={onUnfav}/>
                     :
-                    <UnfavButton />
+                    <UnfavButton onPressAction={onFav}/>
                 }
             </View>
     )

@@ -31,26 +31,13 @@ export default function LibDetail() {
         await getFavs()
         setLoading(false)
     }
-/*
-    const deleteFavFromList = (itemId) => {
-        setFavs(favs.filter((fav)=>fav.id !== itemId))
-    } 
-    
-    const addFavToList = (favObj) => {
-        setFavs([...favs, favObj])
-    } 
-*/
+
     return (
         <Screen withHeader={true}>
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody} positiveBtn={closeModal}/>
             <ScrollView contentContainerStyle={styles.container}>
-                <CardLibDetail libData={lib} 
-                /**
-                //onAddFav={addFavToList} 
-                //onDeleteFav={deleteFavFromList}
-                */
-               />
+                <CardLibDetail libData={lib} />
             </ScrollView>
         </Screen>
     )

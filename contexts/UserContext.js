@@ -50,14 +50,19 @@ export const UserProvider = ({ children }) => {
       }
     };
 
-    const unFav = async (sampleId) => {
+    const updateFavFunc = async (sampleId, actionCode, sampleObj) => {
         try {
-            const resUnFavServ = await updateFav(user.id, sampleId, 'UNFAV')
-            console.log('resUnFavServ: ', resUnFavServ)
-            if(resUnFavServ.errorCode) throw new Error(resUnFavServ)
+            const resUpdateFav = await updateFav(user.id, sampleId, actionCode)
+            if(resUpdateFav.status && resUpdateFav.status !== 200) throw new Error(resUpdateFav.errorDetail)
+              if(actionCode === 'UNFAV'){
+                setFavs(favs.filter(fav => fav.id !== sampleId))
+              }else if(actionCode === 'FAV'){
+                setFavs(prevFavs => [...prevFavs, sampleObj])
+              }
+            return 'SUCCESS'
         } catch (error) {
-            console.log('[CardFavs].[onUnfav].catch=', error)
-            return error
+            console.log('[UserContext].[unfav].catch=', error)
+            return 'ERROR'
         }
     }
 
@@ -105,10 +110,12 @@ export const UserProvider = ({ children }) => {
 
     const isFav = (sampleId) => {
       console.log('[isFav].sampleId=', sampleId)
-      console.log('[isFav].favs=', favs)
       if(favs){
-        return favs.some(sample => sampleId === sample.id)
+        var result = favs.some(sample => sampleId === sample.id)
+        console.log('[isFav].result=', result)
+        return result
       }else{
+        console.log('[isFav].favs falsy')
         return false
       }
     }
@@ -131,7 +138,7 @@ export const UserProvider = ({ children }) => {
     }, [user])
 
     return (
-        <UserContext.Provider value={{ user, saveUserData, clearUser, setPlayingSample, playingSample, sessionState, favs, saveFavsData, isFav, getFavs, cleanSession }}>
+        <UserContext.Provider value={{ user, saveUserData, clearUser, setPlayingSample, playingSample, sessionState, favs, saveFavsData, isFav, getFavs, updateFavFunc, cleanSession }}>
             {children}
         </UserContext.Provider>
     );

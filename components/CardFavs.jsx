@@ -16,7 +16,7 @@ export default function CardFavs({ onDeleteFav }) {
     const inputRef = useRef(null);
     const [playingItemId, setPlayingItemId] = useState(null)
     const [isOpenModal, openModal, closeModal] = useModal(false)
-    const { user, getFavs, favs } = useUser()
+    const { user, getFavs, favs, updateFavFunc } = useUser()
     const [modalTextBody, setModalTextBody] = useState('')
     const [loading, setLoading] = useState(false)
     const [selectedValue, setSelectedValue] = useState('')
@@ -27,20 +27,21 @@ export default function CardFavs({ onDeleteFav }) {
         getFavs()
     }, [])
 
+
     const onUnfav = async (itemId) => {
-        try {
-            const resUnFavServ = await updateFav(user.id, itemId, 'UNFAV')
-            console.log('resUnFavServ: ', resUnFavServ)
-            if(resUnFavServ.errorCode) throw new Error(resUnFavServ)
-            setLoading(false)
-            setModalTextBody('¡Favorito descartado!')
-            onDeleteFav(itemId)
-            openModal()
-        } catch (error) {
-            console.log('[CardFavs].[onUnfav].catch=', error)
+        console.log('[CardLibDetail.jsx].onUnfav.itemId=', itemId)
+        const resUnFav = await updateFavFunc(itemId, 'UNFAV', null)
+        console.log('onUnfav: ', resUnFav)
+        setLoading(false)
+        if(resUnFav !== 'SUCCESS'){
             setError(true)
             setModalTextBody('Hubo un error')
             setLoading(false)
+            openModal()
+        }else{
+            setLoading(false)
+            setModalTextBody('¡Favorito descartado!')
+            onDeleteFav(itemId)
             openModal()
         }
     }

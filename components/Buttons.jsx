@@ -30,8 +30,8 @@ export const FavButton = ({ onPressAction }) => {
     </IconButton>
 }
 
-export const UnfavButton = () => {
-    return <IconButton onPressAction={() => console.log('unfavPressed')}>
+export const UnfavButton = ({ onPressAction }) => {
+    return <IconButton onPressAction={() => onPressAction()}>
         <UnfavIcon width={25} height={25} />
     </IconButton>
 }
