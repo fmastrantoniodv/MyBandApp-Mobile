@@ -11,7 +11,7 @@ import { useUser } from '../contexts/UserContext';
 import { useModal } from '../hooks/useModal';
 import { GenericModal } from './GenericModal';
 
-export default function CardFavs({ onDeleteFav }) {
+export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
     const { control, handleSubmit, formState: { errors, isValid } } = useForm();
     const inputRef = useRef(null);
     const [playingItemId, setPlayingItemId] = useState(null)
@@ -50,11 +50,13 @@ export default function CardFavs({ onDeleteFav }) {
         console.log('onSubmit.data', data)
     }
 
-    const onPlaybackAction = (itemId) => {
-        if(playingItemId === itemId){
+    const onPlaybackAction = (fav) => {
+        if(playingItemId === fav.id){
             setPlayingItemId(null)
+            onPlaybackItem(null)
         }else{
-            setPlayingItemId(itemId)
+            setPlayingItemId(fav.id)
+            onPlaybackItem(fav)
         }
     }
 
@@ -84,7 +86,7 @@ export default function CardFavs({ onDeleteFav }) {
                                 key={fav.id} 
                                 favData={fav} 
                                 playing={fav.id === playingItemId} 
-                                onPlaybackAction={() => onPlaybackAction(fav.id)}
+                                onPlaybackAction={() => onPlaybackAction(fav)}
                                 onUnfav={() => onUnfav(fav.id)}
                                 />
                 })

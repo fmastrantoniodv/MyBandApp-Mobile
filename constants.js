@@ -1,3 +1,7 @@
+import Constants from 'expo-constants';
+const { ENDPOINT_BACKEND, TIMEOUT_SERVICES } = Constants.expoConfig.extra;
+export const ENDPOINT_SRC = ENDPOINT_BACKEND
+
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const passwordRegex = /^[a-zA-Z0-9]{8,}$/
 export const numberRegex = /^[0-9]{8}$/
@@ -6,6 +10,8 @@ export const planList = [
     { "label": "Trial", "value": "trial" },
     { "label": "Pro" , "value": "pro" }
 ]
+
+
 
 export const inputSearchParams = {
     title: 'Buscar',

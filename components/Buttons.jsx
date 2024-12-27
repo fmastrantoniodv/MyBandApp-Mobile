@@ -4,6 +4,8 @@ import PlayIcon from '../assets/img/playIcon.svg'
 import UnfavIcon from '../assets/img/unFavButtonIcon.svg'
 import PauseIcon from '../assets/img/pauseIcon.svg'
 import CloseIcon from '../assets/img/closeIcon.svg'
+import FowardIcon from '../assets/img/fowardIcon.svg'
+import RewindIcon from '../assets/img/rewindIcon.svg'
 
 export function IconButton({ onPressAction, disable, children }) {
 
@@ -51,6 +53,18 @@ export const PauseButton = ({ onPressAction }) => {
 export const CloseButton = ({ onPressAction }) => {
     return <IconButton onPressAction={() => onPressAction()}>
         <CloseIcon width={25} height={25} />
+    </IconButton>
+}
+
+export const FowardButton = ({ onPressAction }) => {
+    return <IconButton onPressAction={() => onPressAction()}>
+        <FowardIcon width={35}/>
+    </IconButton>
+}
+
+export const RewindButton = ({ onPressAction }) => {
+    return <IconButton onPressAction={() => onPressAction()}>
+        <RewindIcon width={35} />
     </IconButton>
 }
 

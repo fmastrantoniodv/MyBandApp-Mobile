@@ -8,6 +8,8 @@ import { useModal } from '../../hooks/useModal'
 import { Loader } from '../../components/Loader'
 import { GenericModal } from '../../components/GenericModal'
 import { useUser } from '../../contexts/UserContext'
+import { AudioPlayer } from '../../components/AudioPlayer'
+
 
 export default function Favs() {
     const [loading, setLoading] = useState(false)
@@ -15,6 +17,7 @@ export default function Favs() {
     const [textBody, setTextBody] = useState('')
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const { user } = useUser()
+    const [playingItem, setPlayingItem] = useState(null)
     
     useEffect(() => {
       onLoad()
@@ -46,7 +49,11 @@ export default function Favs() {
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody} positiveBtn={closeModal}/>
             <ScrollView contentContainerStyle={styles.container}>
-                <CardFavs favs={favs} onDeleteFav={deleteFavFromList}/>
+                <CardFavs favs={favs} onDeleteFav={deleteFavFromList} onPlaybackItem={setPlayingItem}/>
+                {
+                    playingItem && <AudioPlayer playingItem={playingItem} />
+                }
+                
             </ScrollView>
         </Screen>
     )
@@ -57,7 +64,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#262529',
       flex: 1,
       flexDirection: 'column',
-      justifyContent: 'start',
+      justifyContent: 'space-between',
       alignItems: 'center'
     }
   })
