@@ -15,25 +15,26 @@ export const AudioPlayer = ({ playingItem }) => {
 
   // Cargar el archivo de audio
   const loadAudio = async () => {
+    setIsLoading(true)
     try {
-      setIsLoading(true);
-      const { sound: playbackSound, status } = await sound.current.loadAsync(
+      const audioSource = await sound.current.loadAsync(
         { uri: audioUrl },
         { shouldPlay: false }
-      );
-      var soundStatus = await JSON.parse(sound.current._lastStatusUpdate)
-      console.log('[AudioPlayer.jsx].loadAudio.sound=', sound)
-      console.log('[AudioPlayer.jsx].loadAudio.soundStatus=',  soundStatus)
+      )
+      console.log('[AudioPlayer.jsx].loadAudio.audioSource=', audioSource)
       sound.current.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-      soundStatus && setDuration(soundStatus.durationMillis / 1000); // convertir milisegundos a segundos
-      setIsLoading(false);
+      setDuration(audioSource.durationMillis / 1000); // convertir milisegundos a segundos
+      autoPlayOnLoad()
     } catch (error) {
       console.error('Error al cargar el audio:', error);
     }
-  };
+    setIsLoading(false);
+  }
 
   // Actualizar estado con la información de la reproducción
   const onPlaybackStatusUpdate = (status) => {
+    console.log('onPlaybackStatusUpdate.status=', new Date().getTime())
+    
     if (status.isLoaded) {
       setPosition(status.positionMillis / 1000); // convertir milisegundos a segundos
     }
@@ -49,32 +50,36 @@ export const AudioPlayer = ({ playingItem }) => {
     setIsPlaying(!isPlaying);
   };
 
+  const autoPlayOnLoad = async () => {
+    await sound.current.playAsync();
+    setIsPlaying(true)
+  }
+
   // Retroceder 10 segundos
   const rewind = async () => {
-    const newPosition = Math.max(position - 10, 0); // No retroceder más allá del inicio
-    await sound.current.setPositionAsync(newPosition * 1000); // setPositionAsync usa milisegundos
+    const newPosition = Math.max(position - 10, 0)
+    await sound.current.setPositionAsync(newPosition * 1000)
     setPosition(newPosition);
   };
 
   // Adelantar 10 segundos
   const fastForward = async () => {
-    const newPosition = Math.min(position + 10, duration); // No adelantar más allá del final
-    await sound.current.setPositionAsync(newPosition * 1000); // setPositionAsync usa milisegundos
+    const newPosition = Math.min(position + 10, duration)
+    await sound.current.setPositionAsync(newPosition * 1000)
     setPosition(newPosition);
   };
 
   // Formatear tiempo en minutos:segundos
   const formatTime = (timeInSeconds) => {
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = Math.floor(timeInSeconds % 60);
-    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    const minutes = Math.floor(timeInSeconds / 60)
+    const seconds = Math.floor(timeInSeconds % 60)
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   };
 
   // Cargar el audio al montar el componente
   useEffect(() => {
     console.log('[AudioPlayer.jsx].useEffect.audioUrl=', audioUrl)
-    loadAudio();
-
+    loadAudio()
     // Limpiar el audio al desmontar el componente
     return () => {
       sound.current.unloadAsync();
@@ -82,7 +87,7 @@ export const AudioPlayer = ({ playingItem }) => {
   }, [audioUrl]);
 
   return (
-    <View className="absolute bg-white w-11/12 rounded-lg justify-center p-3 bottom-10 border-2">
+    <View className="flex bg-white w-11/12 rounded-lg justify-center p-3 bottom-10 border-10 h-1/4">
       <Text className='text-lg font-medium text-center mb-3'>{`${playingItem.sampleName} - ${playingItem.collectionName}`}</Text>
       {isLoading ? (
         <Text>Cargando...</Text>
@@ -94,8 +99,14 @@ export const AudioPlayer = ({ playingItem }) => {
                 minimumValue={0}
                 maximumValue={duration}
                 onValueChange={(value) => {
-                setPosition(value);
-                sound.current.setPositionAsync(value * 1000); // Cambiar posición en el audio
+                  console.log('onValueChange.value=', value)
+                  console.log('onValueChange.position=', position)
+                }}
+                onSlidingComplete={(value) => {
+                  console.log('onSlidingComplete.value=', value)
+                  console.log('onSlidingComplete.position=', position)
+                  setPosition(value)
+                  sound.current.setPositionAsync(value * 1000); // Cambiar posición en el audio
                 }}
             />
             <Text className='text-center text-lg mb-2'>

@@ -60,6 +60,7 @@ export const FormLogin = () => {
               errors={errors}
               inputRefs={inputRefs}
               isLastInput={isLastInput}
+              autoCapitalize={'none'}
               refInput={(ref) => (inputRefs.current[input.name] = ref)}
               returnKeyType={isLastInput ? 'done' : 'next'}
               onSubmitEditing={() => {

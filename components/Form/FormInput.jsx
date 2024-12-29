@@ -8,7 +8,8 @@ export const FormInput = ({
   errors, 
   refInput, 
   returnKeyType, 
-  onSubmitEditing
+  onSubmitEditing,
+  autoCapitalize
 }) => {
   return ( 
     <>
@@ -35,6 +36,7 @@ export const FormInput = ({
             ref={refInput}
             returnKeyType={returnKeyType}
             onSubmitEditing={onSubmitEditing}
+            autoCapitalize={autoCapitalize}
           />
         </>
       )}

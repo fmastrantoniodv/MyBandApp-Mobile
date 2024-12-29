@@ -1,4 +1,4 @@
-import { View, Text, Pressable, StyleSheet } from 'react-native'
+import { View, Text, Pressable, StyleSheet, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
 import FavIcon from '../assets/img/favIcon.svg'
 import { inputSearchParams } from '../constants'
@@ -26,7 +26,6 @@ export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
         console.log('[CardFavs].useEffect')
         getFavs()
     }, [])
-
 
     const onUnfav = async (itemId) => {
         console.log('[CardLibDetail.jsx].onUnfav.itemId=', itemId)
@@ -60,41 +59,38 @@ export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
         }
     }
 
-
     return(
-        <View className='flex bg-white w-11/12 rounded-lg justify-center p-3 mt-5'>
+        <View className='flex bg-white w-11/12 rounded-lg justify-start p-3 mt-5 h-4/6'
+            style={playingItemId === null && styles.fullHeight}
+        >
             <GenericModal 
                 openModal={isOpenModal}
                 closeModal={closeModal} 
                 textBody={modalTextBody}
                 positiveBtn={closeModal}
-            />
-            <Text className='text-2xl font-semibold'>
+                />
+            <Text className='text-2xl font-semibold mb-3'>
                 Mis favoritos
             </Text>
-            <FormInput 
-                inputObj={inputSearchParams} 
-                control={control} 
-                errors={errors} 
-                refInput={inputRef}
-                returnKeyType={'done'}
-                onSubmitEditing={() => handleSubmit(onSubmit)()}
-            />
             {favs && favs[0] !== undefined ?
-                favs.map((fav) => {
-                    return <ItemFav 
-                                key={fav.id} 
-                                favData={fav} 
-                                playing={fav.id === playingItemId} 
-                                onPlaybackAction={() => onPlaybackAction(fav)}
-                                onUnfav={() => onUnfav(fav.id)}
-                                />
-                })
-                :
-                <Text className='text-2xl text-center m-4'>No hay favoritos agregados</Text>
+            <FlatList
+                data={favs}
+                keyExtractor={(favs) => favs.id}
+                renderItem={({ item, index }) => (
+                    <ItemFav 
+                        key={item.id} 
+                        favData={item} 
+                        playing={item.id === playingItemId} 
+                        onPlaybackAction={() => onPlaybackAction(item)}
+                        onUnfav={() => onUnfav(item.id)}
+                        />
+                )}
+            />
+            :
+            <Text className='text-2xl text-center m-4'>No hay favoritos agregados</Text>
             }
         </View>
-            )
+    )
 }
 
 function ItemFav({ favData, playing, onPlaybackAction, onUnfav }) {
@@ -148,5 +144,8 @@ export function ButtonGoFavs() {
 const styles = StyleSheet.create({
     pressedStyle: {
         opacity: 0.7
-      }
+      },
+    fullHeight: {
+        height: 'auto'
+    }
   })

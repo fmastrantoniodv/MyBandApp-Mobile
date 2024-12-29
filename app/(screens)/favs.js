@@ -48,13 +48,13 @@ export default function Favs() {
         <Screen withHeader={true}>
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody} positiveBtn={closeModal}/>
-            <ScrollView contentContainerStyle={styles.container}>
+            <View style={styles.container}>
                 <CardFavs favs={favs} onDeleteFav={deleteFavFromList} onPlaybackItem={setPlayingItem}/>
                 {
                     playingItem && <AudioPlayer playingItem={playingItem} />
                 }
                 
-            </ScrollView>
+            </View>
         </Screen>
     )
 }
