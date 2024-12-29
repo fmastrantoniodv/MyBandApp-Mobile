@@ -17,7 +17,8 @@ export default function Favs() {
     const [textBody, setTextBody] = useState('')
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const { user } = useUser()
-    const [playingItem, setPlayingItem] = useState(null)
+    const [selectedItem, setSelectedItem] = useState(null)
+    const [playing, setPlaying] = useState(false)
     
     useEffect(() => {
       onLoad()
@@ -39,19 +40,19 @@ export default function Favs() {
         }
         setLoading(false)
     }
-
-    const deleteFavFromList = (itemId) => {
-        setFavs(favs.filter((fav)=>fav.id !== itemId))
-    } 
+    
+    const onPlaybackFav = (fav) => {
+        setSelectedItem(fav)
+    }
 
     return (
         <Screen withHeader={true}>
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody} positiveBtn={closeModal}/>
             <View style={styles.container}>
-                <CardFavs favs={favs} onDeleteFav={deleteFavFromList} onPlaybackItem={setPlayingItem}/>
+                <CardFavs favs={favs} onPlaybackItem={onPlaybackFav} playing={playing} selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
                 {
-                    playingItem && <AudioPlayer playingItem={playingItem} />
+                    selectedItem && <AudioPlayer selectedItem={selectedItem} playing={playing} onPlaying={setPlaying}/>
                 }
                 
             </View>

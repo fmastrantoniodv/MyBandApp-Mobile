@@ -11,15 +11,11 @@ import { useUser } from '../contexts/UserContext';
 import { useModal } from '../hooks/useModal';
 import { GenericModal } from './GenericModal';
 
-export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm();
-    const inputRef = useRef(null);
-    const [playingItemId, setPlayingItemId] = useState(null)
+export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSelectedItem }) {
     const [isOpenModal, openModal, closeModal] = useModal(false)
     const { user, getFavs, favs, updateFavFunc } = useUser()
     const [modalTextBody, setModalTextBody] = useState('')
     const [loading, setLoading] = useState(false)
-    const [selectedValue, setSelectedValue] = useState('')
     const [error, setError] = useState(false)
 
     useEffect(() => {
@@ -40,7 +36,6 @@ export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
         }else{
             setLoading(false)
             setModalTextBody('¡Favorito descartado!')
-            onDeleteFav(itemId)
             openModal()
         }
     }
@@ -50,18 +45,16 @@ export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
     }
 
     const onPlaybackAction = (fav) => {
-        if(playingItemId === fav.id){
-            setPlayingItemId(null)
+        if(selectedItem && selectedItem.id === fav.id){
             onPlaybackItem(null)
         }else{
-            setPlayingItemId(fav.id)
             onPlaybackItem(fav)
         }
     }
 
     return(
         <View className='flex bg-white w-11/12 rounded-lg justify-start p-3 mt-5 h-4/6'
-            style={playingItemId === null && styles.fullHeight}
+            style={selectedItem === null && styles.fullHeight}
         >
             <GenericModal 
                 openModal={isOpenModal}
@@ -77,13 +70,16 @@ export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
                 data={favs}
                 keyExtractor={(favs) => favs.id}
                 renderItem={({ item, index }) => (
-                    <ItemFav 
-                        key={item.id} 
-                        favData={item} 
-                        playing={item.id === playingItemId} 
-                        onPlaybackAction={() => onPlaybackAction(item)}
-                        onUnfav={() => onUnfav(item.id)}
-                        />
+                    <Pressable onPress={(selectedItem && item.id === selectedItem.id) ? () => setSelectedItem(null) : () => setSelectedItem(item)}>
+                        <ItemFav 
+                            key={item.id} 
+                            favData={item} 
+                            playing={(selectedItem && item.id === selectedItem.id && playing)} 
+                            onPlaybackAction={() => onPlaybackAction(item)}
+                            onUnfav={() => onUnfav(item.id)}
+                            selectedItem={(selectedItem && item.id === selectedItem.id)}
+                            />
+                    </Pressable>
                 )}
             />
             :
@@ -93,7 +89,7 @@ export default function CardFavs({ onDeleteFav, onPlaybackItem }) {
     )
 }
 
-function ItemFav({ favData, playing, onPlaybackAction, onUnfav }) {
+function ItemFav({ favData, playing, onPlaybackAction, onUnfav, selectedItem }) {
     useEffect(()=>{
         console.log('[ItemFav].favData=', favData)
     }, [])
@@ -101,6 +97,7 @@ function ItemFav({ favData, playing, onPlaybackAction, onUnfav }) {
     return(
             <View 
                 className='flex-row border-black border-2 w-12/12 rounded-lg justify-center p-3 items-center'
+                style={selectedItem && styles.selectedFav}
             >
                 <View className='flex-1 ml-2 flex-row h-full'>
                     <View className='flex-row items-center'>
@@ -147,5 +144,8 @@ const styles = StyleSheet.create({
       },
     fullHeight: {
         height: 'auto'
+    },
+    selectedFav: {
+        backgroundColor: '#cbcbcb'
     }
   })

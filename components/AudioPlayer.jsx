@@ -5,13 +5,12 @@ import Slider from '@react-native-community/slider';  // Cambia esta importació
 import { ENDPOINT_SRC } from '../constants'
 import { PlayButton, PauseButton, RewindButton, FowardButton } from './Buttons'
 
-export const AudioPlayer = ({ playingItem }) => {
+export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
   const sound = useRef(new Audio.Sound());
-  const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const audioUrl= `${ENDPOINT_SRC}/api/samples/${playingItem.collectionCode}/${playingItem.sampleName}`
+  const audioUrl= `${ENDPOINT_SRC}/api/samples/${selectedItem.collectionCode}/${selectedItem.sampleName}`
 
   // Cargar el archivo de audio
   const loadAudio = async () => {
@@ -33,54 +32,47 @@ export const AudioPlayer = ({ playingItem }) => {
 
   // Actualizar estado con la información de la reproducción
   const onPlaybackStatusUpdate = (status) => {
-    console.log('onPlaybackStatusUpdate.status=', new Date().getTime())
-    
     if (status.isLoaded) {
-      setPosition(status.positionMillis / 1000); // convertir milisegundos a segundos
+      setPosition(status.positionMillis / 1000)
     }
   };
 
   // Iniciar o pausar el audio
   const togglePlayback = async () => {
-    if (isPlaying) {
-      await sound.current.pauseAsync();
+    if (playing) {
+      await sound.current.pauseAsync()
     } else {
-      await sound.current.playAsync();
+      await sound.current.playAsync()
     }
-    setIsPlaying(!isPlaying);
+    onPlaying(!playing);
   };
 
   const autoPlayOnLoad = async () => {
-    await sound.current.playAsync();
-    setIsPlaying(true)
+    await sound.current.playAsync()
+    onPlaying(true)
   }
 
-  // Retroceder 10 segundos
   const rewind = async () => {
     const newPosition = Math.max(position - 10, 0)
     await sound.current.setPositionAsync(newPosition * 1000)
     setPosition(newPosition);
   };
 
-  // Adelantar 10 segundos
   const fastForward = async () => {
     const newPosition = Math.min(position + 10, duration)
     await sound.current.setPositionAsync(newPosition * 1000)
     setPosition(newPosition);
   };
 
-  // Formatear tiempo en minutos:segundos
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60)
     const seconds = Math.floor(timeInSeconds % 60)
     return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
   };
 
-  // Cargar el audio al montar el componente
   useEffect(() => {
     console.log('[AudioPlayer.jsx].useEffect.audioUrl=', audioUrl)
     loadAudio()
-    // Limpiar el audio al desmontar el componente
     return () => {
       sound.current.unloadAsync();
     };
@@ -88,7 +80,7 @@ export const AudioPlayer = ({ playingItem }) => {
 
   return (
     <View className="flex bg-white w-11/12 rounded-lg justify-center p-3 bottom-10 border-10 h-1/4">
-      <Text className='text-lg font-medium text-center mb-3'>{`${playingItem.sampleName} - ${playingItem.collectionName}`}</Text>
+      <Text className='text-lg font-medium text-center mb-3'>{`${selectedItem.sampleName} - ${selectedItem.collectionName}`}</Text>
       {isLoading ? (
         <Text>Cargando...</Text>
       ) : (
@@ -98,13 +90,7 @@ export const AudioPlayer = ({ playingItem }) => {
                 value={position}
                 minimumValue={0}
                 maximumValue={duration}
-                onValueChange={(value) => {
-                  console.log('onValueChange.value=', value)
-                  console.log('onValueChange.position=', position)
-                }}
                 onSlidingComplete={(value) => {
-                  console.log('onSlidingComplete.value=', value)
-                  console.log('onSlidingComplete.position=', position)
                   setPosition(value)
                   sound.current.setPositionAsync(value * 1000); // Cambiar posición en el audio
                 }}
@@ -115,7 +101,7 @@ export const AudioPlayer = ({ playingItem }) => {
             <View className="flex-row justify-center items-center">
                 <RewindButton onPressAction={rewind}/>
                 {
-                    isPlaying ?
+                    playing ?
                     <PauseButton onPressAction={togglePlayback}/>
                     :
                     <PlayButton onPressAction={togglePlayback}/>
