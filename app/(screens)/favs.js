@@ -21,6 +21,7 @@ export default function Favs() {
     const [playing, setPlaying] = useState(false)
     
     useEffect(() => {
+      console.log('[Favs.js].useEffect')
       onLoad()
     }, [])
 
@@ -54,7 +55,6 @@ export default function Favs() {
                 {
                     selectedItem && <AudioPlayer selectedItem={selectedItem} playing={playing} onPlaying={setPlaying}/>
                 }
-                
             </View>
         </Screen>
     )

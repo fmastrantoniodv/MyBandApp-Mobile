@@ -24,7 +24,9 @@ export default function Layout() {
     const HamburgerMenuButton = () => {
         return (
             <Pressable onPress={toggleMenu}>
-                <Text className='text-2xl'>☰</Text>
+                <View className='flex-1 justify-center'>
+                    <Text className='text-2xl'>☰</Text>
+                </View>
             </Pressable>)
     }
 

@@ -1,19 +1,15 @@
 import { View, Text, Pressable, StyleSheet, FlatList } from 'react-native'
 import { useRouter } from 'expo-router'
 import FavIcon from '../assets/img/favIcon.svg'
-import { inputSearchParams } from '../constants'
-import { useEffect, useRef, useState } from 'react';
-import { FormInput } from './Form/FormInput'
-import { useForm } from 'react-hook-form';
-import { FavButton, UnfavButton, PlayButton, PauseButton } from './Buttons'
-import { updateFav } from '../services/usersServ'
+import { useEffect, useState } from 'react';
+import { FavButton,  PlayButton, PauseButton } from './Buttons'
 import { useUser } from '../contexts/UserContext';
 import { useModal } from '../hooks/useModal';
 import { GenericModal } from './GenericModal';
 
 export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSelectedItem }) {
     const [isOpenModal, openModal, closeModal] = useModal(false)
-    const { user, getFavs, favs, updateFavFunc } = useUser()
+    const { getFavs, favs, updateFavFunc } = useUser()
     const [modalTextBody, setModalTextBody] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
@@ -27,7 +23,7 @@ export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSel
         console.log('[CardLibDetail.jsx].onUnfav.itemId=', itemId)
         const resUnFav = await updateFavFunc(itemId, 'UNFAV', null)
         console.log('onUnfav: ', resUnFav)
-        setLoading(false)
+        setLoading(true)
         if(resUnFav !== 'SUCCESS'){
             setError(true)
             setModalTextBody('Hubo un error')
@@ -38,10 +34,6 @@ export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSel
             setModalTextBody('¡Favorito descartado!')
             openModal()
         }
-    }
-
-    const onSubmit = async (data) =>{
-        console.log('onSubmit.data', data)
     }
 
     const onPlaybackAction = (fav) => {

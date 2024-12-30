@@ -80,7 +80,12 @@ export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
 
   return (
     <View className="flex bg-white w-11/12 rounded-lg justify-center p-3 bottom-10 border-10 h-1/4">
-      <Text className='text-lg font-medium text-center mb-3'>{`${selectedItem.sampleName} - ${selectedItem.collectionName}`}</Text>
+      {
+        selectedItem.collectionName ?
+          <Text className='text-lg font-medium text-center mb-3'>{`${selectedItem.sampleName} - ${selectedItem.collectionName}`}</Text>
+        :
+          <Text className='text-xl font-medium text-center mb-3'>{`${selectedItem.sampleName}`}</Text>
+      }
       {isLoading ? (
         <Text>Cargando...</Text>
       ) : (

@@ -1,11 +1,8 @@
-import { View, Text, Pressable, StyleSheet, Image } from 'react-native'
-import { useRouter } from 'expo-router'
-import FavIcon from '../assets/img/favIcon.svg'
+import { View, Text, Pressable, StyleSheet, Image, FlatList } from 'react-native'
 import { inputSearchParams } from '../constants'
 import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FavButton, UnfavButton, PlayButton, PauseButton } from './Buttons'
-import { updateFav } from '../services/usersServ'
 import { useUser } from '../contexts/UserContext';
 import { useModal } from '../hooks/useModal';
 import { GenericModal } from './GenericModal';
@@ -13,7 +10,7 @@ import Constants from 'expo-constants';
 import { useLibs } from '../contexts/LibContext';
 const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 
-export default function CardLibDetail({ libData }) {
+export default function CardLibDetail({ libData, onPlaybackItem, playing, selectedItem, setSelectedItem }) {
     const { control, handleSubmit, formState: { errors, isValid } } = useForm();
     const inputRef = useRef(null);
     const [playingItemId, setPlayingItemId] = useState(null)
@@ -23,10 +20,12 @@ export default function CardLibDetail({ libData }) {
     const [loading, setLoading] = useState(false)
     const [selectedValue, setSelectedValue] = useState('')
     const [error, setError] = useState(false)
+    const [sampleListLib, setSampleListLib] = useState(null)
 
     useEffect(()=>{
         console.log('[CardLibDetail].useEffect')
         console.log('[CardLibDetail].libData=', libData)
+        libData && setSampleListLib(libData.sampleList)
     }, [libData])
 
     const onUnfav = async (itemId) => {
@@ -60,14 +59,13 @@ export default function CardLibDetail({ libData }) {
         console.log('onSubmit.data', data)
     }
 
-    const onPlaybackAction = (itemId) => {
-        if(playingItemId === itemId){
-            setPlayingItemId(null)
+    const onPlaybackAction = (libItem) => {
+        if(selectedItem && selectedItem.id === libItem.id){
+            onPlaybackItem(null)
         }else{
-            setPlayingItemId(itemId)
+            onPlaybackItem(libItem)
         }
     }
-
 
     return(
         <View className='flex bg-white w-11/12 rounded-lg justify-center p-3 mt-5'>
@@ -109,20 +107,25 @@ export default function CardLibDetail({ libData }) {
                 }
             </View>
             {
-            libData && libData.sampleList ?
-                libData.sampleList.map((sample) => {
-                    return <SampleItem 
-                                key={sample.id} 
-                                sampleData={sample}
-                                isFav={favs && isFav(sample.id)}
-                                onUnfav={() => onUnfav(sample.id)}
-                                onFav={() => onFav(sample.id, sample)}
-                                /**
-                                playing={fav.id === playingItemId} 
-                                onPlaybackAction={() => onPlaybackAction(fav.id)}
-                                 */ 
-                                />
-                })
+            libData && sampleListLib ?
+                        <FlatList
+                            data={sampleListLib}
+                            keyExtractor={(sampleListLib) => sampleListLib.id}
+                            renderItem={({ item, index }) => (
+                                <Pressable onPress={(selectedItem && item.id === selectedItem.id) ? () => setSelectedItem(null) : () => setSelectedItem(item)}>
+                                    <SampleItem 
+                                        isFav={favs && isFav(item.id)}
+                                        key={item.id} 
+                                        onFav={() => onFav(item.id, item)}
+                                        onPlaybackAction={() => onPlaybackAction(item)}  
+                                        onUnfav={() => onUnfav(item.id)}
+                                        playing={(selectedItem && item.id === selectedItem.id && playing)}
+                                        selectedItem={(selectedItem && item.id === selectedItem.id)}
+                                        sampleData={item}
+                                    />
+                                </Pressable>
+                            )}
+                        />
                 :
                 <Text className='text-2xl text-center m-4'>No hay samples en esta libreria</Text>
             }

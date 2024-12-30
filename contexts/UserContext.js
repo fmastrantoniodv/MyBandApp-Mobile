@@ -53,15 +53,21 @@ export const UserProvider = ({ children }) => {
     const updateFavFunc = async (sampleId, actionCode, sampleObj) => {
         try {
             const resUpdateFav = await updateFav(user.id, sampleId, actionCode)
+            if(actionCode === 'UNFAV'){
+              setFavs(favs.filter(fav => fav.id !== sampleId))
+            }else if(actionCode === 'FAV'){
+              setFavs(prevFavs => [...prevFavs, sampleObj])
+            }
             if(resUpdateFav.status && resUpdateFav.status !== 200) throw new Error(resUpdateFav.errorDetail)
-              if(actionCode === 'UNFAV'){
-                setFavs(favs.filter(fav => fav.id !== sampleId))
-              }else if(actionCode === 'FAV'){
-                setFavs(prevFavs => [...prevFavs, sampleObj])
-              }
             return 'SUCCESS'
         } catch (error) {
             console.log('[UserContext].[unfav].catch=', error)
+            if(actionCode === 'UNFAV'){
+              setFavs(prevFavs => [...prevFavs, sampleObj])
+            }else if(actionCode === 'FAV'){
+              setFavs(favs.filter(fav => fav.id !== sampleId))
+            }
+            console.log('[UserContext].[unfav].rollback local.favs=', favs)
             return 'ERROR'
         }
     }

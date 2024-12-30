@@ -10,6 +10,7 @@ import { GenericModal } from '../../../components/GenericModal'
 import { useUser } from '../../../contexts/UserContext'
 import { useLibs } from '../../../contexts/LibContext'
 import { useLocalSearchParams } from 'expo-router'
+import { AudioPlayer } from '../../../components/AudioPlayer'
 
 export default function LibDetail() {
     const [loading, setLoading] = useState(false)
@@ -19,9 +20,11 @@ export default function LibDetail() {
     const { libs } = useLibs()
     const { libCollectionCode } = useLocalSearchParams()
     const { getFavs } = useUser()
+    const [selectedItem, setSelectedItem] = useState(null)
+    const [playing, setPlaying] = useState(false)
     
     useEffect(() => {
-        console.log('[LibDetail].useEffect')
+        console.log('[LibDetail.js].useEffect')
         onLoad()
     }, [])
 
@@ -32,23 +35,36 @@ export default function LibDetail() {
         setLoading(false)
     }
 
+    const onPlaybackLibSample = (fav) => {
+        setSelectedItem(fav)
+    }
+
     return (
         <Screen withHeader={true}>
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody} positiveBtn={closeModal}/>
-            <ScrollView contentContainerStyle={styles.container}>
-                <CardLibDetail libData={lib} />
-            </ScrollView>
+            <View style={styles.container}>
+                <CardLibDetail 
+                    libData={lib} 
+                    onPlaybackItem={onPlaybackLibSample} 
+                    playing={playing} 
+                    selectedItem={selectedItem} 
+                    setSelectedItem={setSelectedItem}
+                />
+                {
+                    selectedItem && <AudioPlayer selectedItem={selectedItem} playing={playing} onPlaying={setPlaying}/>
+                }
+            </View>
         </Screen>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: '#262529',
-      flex: 1,
-      flexDirection: 'column',
-      justifyContent: 'start',
-      alignItems: 'center'
+        backgroundColor: '#262529',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     }
   })
