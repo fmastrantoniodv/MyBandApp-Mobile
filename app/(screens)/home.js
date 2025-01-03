@@ -53,15 +53,15 @@ export default function Home() {
             <Stack.Screen 
                 options={{
                     headerShown: true,
-                    headerBackVisible: false
+                    headerLeft: null
                 }}
             />
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody}/>
-            <ScrollView contentContainerStyle={styles.container}>
+            <View style={styles.container}>
                 <ButtonGoFavs />
                 <CardLibs collections={libs}/>
-            </ScrollView>
+            </View>
         </Screen>
     )
 }

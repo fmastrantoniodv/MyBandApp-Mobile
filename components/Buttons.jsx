@@ -6,6 +6,8 @@ import PauseIcon from '../assets/img/pauseIcon.svg'
 import CloseIcon from '../assets/img/closeIcon.svg'
 import FowardIcon from '../assets/img/fowardIcon.svg'
 import RewindIcon from '../assets/img/rewindIcon.svg'
+import HamburgerMenuIcon from '../assets/img/menuIcon.svg'
+import BackArrow from '../assets/img/backArrow.svg'
 
 export function IconButton({ onPressAction, disable, children }) {
 
@@ -65,6 +67,18 @@ export const FowardButton = ({ onPressAction }) => {
 export const RewindButton = ({ onPressAction }) => {
     return <IconButton onPressAction={() => onPressAction()}>
         <RewindIcon width={35} />
+    </IconButton>
+}
+
+export const HamburgerMenuButton = ({ onPressAction }) => {
+    return <IconButton onPressAction={() => onPressAction()}>
+        <HamburgerMenuIcon width={25} />
+    </IconButton>
+}
+
+export const BackButton = ({ onPressAction }) => {
+    return <IconButton onPressAction={() => onPressAction()}>
+        <BackArrow width={17} />
     </IconButton>
 }
 

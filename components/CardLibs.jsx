@@ -1,42 +1,62 @@
-import { inputSearchParams } from '../constants'
-import { useRef } from 'react';
-import { View, Text, Image, Pressable, StyleSheet } from 'react-native'
-import { FormInput } from './Form/FormInput'
-import { useForm } from 'react-hook-form';
+import { useCallback, useState } from 'react';
+import { View, Text, Image, Pressable, StyleSheet, FlatList, TextInput } from 'react-native'
 import arrowIcon from '../assets/img/arrow.png'
 import Constants from 'expo-constants';
 import { useRouter } from 'expo-router'
+import { useFocusEffect } from 'expo-router';
 const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 
 export default function CardLibs({ collections }) {
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm();
-    const inputRef = useRef(null);
-    
-    const onSubmit = async (data) =>{
-        console.log('onSubmit.data', data)
-    }
+    const [searchText, setSearchText] = useState("");
+    const [filteredData, setFilteredData] = useState(collections);
 
-    console.log('[CardLibs].collections',collections)
+    useFocusEffect(
+        useCallback(() => {
+            console.log('[CardLibs.jsx].[useFocusEffect]')
+            setFilteredData(collections)
+            setSearchText('')
+        }, [])
+    )
+
+    const handleSearch = (text) => {
+        setSearchText(text);
+        if (text === "") {
+          setFilteredData(collections);
+        } else {
+          const filtered = collections.filter(
+            (item) => {
+            const textLower = text.toLowerCase()
+            return (
+                item.collectionName.toLowerCase().includes(textLower) ||
+                item.plan.toLowerCase().includes(textLower) || 
+                item.tags.some((tag) => tag.toLowerCase().includes(textLower))
+            )
+          });
+          setFilteredData(filtered);
+        }
+      };
 
     return(
         <View className='flex bg-white w-11/12 rounded-lg justify-center p-3 mt-5'>
             <Text className='text-2xl font-semibold'>
                 Librerías
             </Text>
-            <FormInput 
-                inputObj={inputSearchParams} 
-                control={control} 
-                errors={errors} 
-                refInput={inputRef}
-                returnKeyType={'done'}
-                onSubmitEditing={() => handleSubmit(onSubmit)()}
+            <TextInput
+                style={styles.input}
+                placeholder="Buscar por nombre, tags o plan"
+                value={searchText}
+                onChangeText={handleSearch}
             />
-            {collections ?
-                collections.map((item) => {
-                    return <ItemLib key={item.id} libData={item}/>
-                })
+            {filteredData ?
+                <FlatList
+                    data={filteredData}
+                    keyExtractor={(filteredData) => filteredData.id}
+                    renderItem={({ item, index }) => (
+                        <ItemLib key={item.id} libData={item}/>
+                    )} 
+                />
                 :
-                null
+                <Text className='text-2xl text-center m-4'>No hay librerias disponibles</Text>
             }
         </View>
     )
@@ -71,5 +91,13 @@ function ItemLib({ libData }) {
 const styles = StyleSheet.create({
     pressedStyle: {
         opacity: 0.7
-      }
+    },
+    input: { 
+        borderWidth: 1, 
+        paddingLeft: 15, 
+        marginBottom: 10, 
+        borderRadius: 10, 
+        height: '50', 
+        fontSize: 14 
+    }
   })

@@ -68,7 +68,9 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
     }
 
     return(
-        <View className='flex bg-white w-11/12 rounded-lg justify-center p-3 mt-5'>
+        <View className='flex bg-white w-11/12 rounded-lg justify-center p-3 mt-5'
+            style={styles.fullHeight}
+        >
             <GenericModal 
                 openModal={isOpenModal}
                 closeModal={closeModal} 
@@ -133,7 +135,7 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
             )
 }
 
-function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isFav }) {
+function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isFav, selectedItem }) {
     useEffect(()=>{
         console.log('[SampleItem].sampleData=', sampleData)
         console.log('[SampleItem].isFav=', isFav)
@@ -142,6 +144,7 @@ function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isF
     return(
             <View 
                 className='flex-row border-black border-t-2 w-12/12 justify-center py-2 items-center'
+                style={selectedItem && styles.selectedSample}
             >
                 <View className='flex-1 ml-2 flex-row h-full'>
                     <View className='flex-row items-center'>
@@ -166,5 +169,12 @@ function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isF
 const styles = StyleSheet.create({
     pressedStyle: {
         opacity: 0.7
-      }
+    },
+    fullHeight: {
+        height: 'auto'
+    },
+    selectedSample: {
+        backgroundColor: '#E9E9E9',
+        
+    }
   })

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Animated, Pressable } from 'react-native';
 import { CloseButton } from './Buttons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useUser } from '../contexts/UserContext';
@@ -29,7 +29,9 @@ export function HamburgerMenu({ isVisible, toggleMenu, onOptionSelect }) {
         styles.menu, { transform: [{ translateX: slideAnim }] },
         {top: insets.top}
       ]}>
-        <View className='w-12/12 p-5 flex-row justify-end'>
+        <View className='w-12/12 flex-row justify-end items-center pr-3'
+        style={styles.closeMenuContainer}
+        >
           <CloseButton onPressAction={() => closeMenu()}/>
         </View>
         <View style={[
@@ -88,8 +90,7 @@ const styles = StyleSheet.create({
   menuContent: {
     flex: 1,
     justifyContent: 'space-between',
-    flexDirection: 'column',
-    marginTop: 6
+    flexDirection: 'column'
   },
   menuOption: {
     fontSize: 18,
@@ -101,5 +102,8 @@ const styles = StyleSheet.create({
   },
   lastOption: {
     borderBottomWidth: 1,
+  },
+  closeMenuContainer: {
+    height: 70
   }
 });

@@ -6,28 +6,19 @@ import { UserProvider } from '../contexts/UserContext';
 import { LibsProvider } from "../contexts/LibContext";
 import { HamburgerMenu } from "../components/HamburgerMenu";
 import { useState } from "react";
+import { HamburgerMenuButton, BackButton } from '../components/Buttons'
+import { useNavigation } from "expo-router";
       
 export default function Layout() {
     const [menuVisible, setMenuVisible] = useState(false);
+    const navigation = useNavigation()
 
-    // Función que maneja el evento de selección de una opción del menú
     const handleMenuOptionSelect = (option) => {
-      console.log(`Opción seleccionada: ${option}`);
-      // Aquí puedes definir lo que debe hacer cada opción
-    };
+      console.log(`Opción seleccionada: ${option}`);     
+    }
   
-    // Función para cerrar el menú
     const toggleMenu = () => {
         setMenuVisible(!menuVisible);
-      };
-
-    const HamburgerMenuButton = () => {
-        return (
-            <Pressable onPress={toggleMenu}>
-                <View className='flex-1 justify-center'>
-                    <Text className='text-2xl'>☰</Text>
-                </View>
-            </Pressable>)
     }
 
     return (
@@ -43,11 +34,14 @@ export default function Layout() {
                         <View className="flex-1">
                             <Stack
                                 screenOptions={{
-                                    headerStyle: { backgroundColor: "white"},
+                                    headerStyle: { backgroundColor: "white" },
                                     headerTintColor: "black",
-                                    headerTitle: props => <MbaLogoSvg width={70} height={70}/>,
+                                    headerTitle: props => <MbaLogoSvg width={90} height={70}/>,
                                     headerTitleAlign: 'center',
-                                    headerRight: () => <HamburgerMenuButton />
+                                    headerRightContainerStyle: { justifyContent: "center" },
+                                    headerRight: () => <HamburgerMenuButton onPressAction={toggleMenu}/>,
+                                    headerLeft: () => <BackButton onPressAction={() => navigation.goBack()}/>,
+                                    headerBackButtonDisplayMode: "minimal",
                                 }}
                             />
                         </View>
