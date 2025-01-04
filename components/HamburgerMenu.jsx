@@ -3,13 +3,14 @@ import { View, Text, StyleSheet, Animated, Pressable } from 'react-native';
 import { CloseButton } from './Buttons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useUser } from '../contexts/UserContext';
-import { Link, useRouter } from 'expo-router'
+import { useRouter, useSegments } from 'expo-router'
 
-export function HamburgerMenu({ isVisible, toggleMenu, onOptionSelect }) {
+export function HamburgerMenu({ isVisible, toggleMenu }) {
   const insets = useSafeAreaInsets()
   const slideAnim = new Animated.Value(250)
   const { cleanSession } = useUser()
   const router = useRouter()
+  const segments = useSegments()
 
   useEffect(() => {
     Animated.timing(slideAnim, {
@@ -22,6 +23,16 @@ export function HamburgerMenu({ isVisible, toggleMenu, onOptionSelect }) {
   const closeMenu = () => {
     toggleMenu()
   }
+
+  const navigateToScreen = (screenName) => {
+    if (segments[segments.length - 1] !== screenName) {
+      if(segments[segments.length - 1] === 'changePass' || segments[segments.length - 1] === 'changePlan'){
+        router.replace(`/${screenName}`)
+      }else{
+        router.push(`/${screenName}`);
+      }
+    }
+  };
   
   return (
     <Animated.View 
@@ -40,11 +51,17 @@ export function HamburgerMenu({ isVisible, toggleMenu, onOptionSelect }) {
           <View>
             <MenuButton
               title='Cambiar contraseña'
-              action={() => console.log('Nav Cambiar contraseña')}
+              action={() => {
+                closeMenu()
+                navigateToScreen('changePass')
+              }}
             />
             <MenuButton
               title='Cambiar plan'
-              action={() => console.log('Nav Cambiar plan')}
+              action={() => {
+                closeMenu()
+                navigateToScreen('changePlan')
+              }}
               last={true}
             />
           </View>

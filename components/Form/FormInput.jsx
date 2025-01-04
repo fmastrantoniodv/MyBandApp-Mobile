@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput, Text, StyleSheet} from 'react-native';
+import { TextInput, Text, StyleSheet, View} from 'react-native';
 import { Controller } from 'react-hook-form';
 
 export const FormInput = ({
@@ -12,10 +12,8 @@ export const FormInput = ({
   autoCapitalize
 }) => {
   return ( 
-    <>
-    {
-      inputObj.name !== 'searchInput' && <Text className='text-xl font-semibold'>{inputObj.title}</Text>
-    }
+    <View className='flex'>
+      <Text className='text-xl font-semibold mb-2'>{inputObj.title}</Text>
       <Controller
         name={inputObj.name}
         control={control}
@@ -42,7 +40,7 @@ export const FormInput = ({
       )}
       />
       {errors[inputObj.name] && <Text style={styles.error}>{errors[inputObj.name].message}</Text>}
-    </>
+    </View>
   )
 }
 
@@ -50,6 +48,6 @@ const styles = StyleSheet.create({
   container: { 
     padding: 20
   },
-  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 10, height: '50', fontSize: 16 },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 10, height: '50', fontSize: 16, display: 'flex' },
   error: { color: 'red', marginBottom: 10 },
 });

@@ -53,7 +53,8 @@ export default function Home() {
             <Stack.Screen 
                 options={{
                     headerShown: true,
-                    headerLeft: null
+                    headerLeft: null,
+                    headerBackVisible: false
                 }}
             />
             <Loader loading={loading} />

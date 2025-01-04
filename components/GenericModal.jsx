@@ -16,7 +16,7 @@ export const GenericModal = ({ openModal, closeModal, positiveBtn, textBody }) =
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>{textBody}</Text>
-              <FormButton type='primary' onPressAction={positiveBtn} text='Aceptar'></FormButton>
+              <FormButton type='primary' onPressAction={positiveBtn} text='Aceptar' />
             </View>
           </View>
         </Modal>

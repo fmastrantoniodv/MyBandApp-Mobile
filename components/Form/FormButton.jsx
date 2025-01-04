@@ -6,7 +6,7 @@ export function FormButton({ type, onPressAction, text, disable }) {
         <Pressable className='flex flex-row justify-center' onPress={disable ? null : () => onPressAction()}>
             {({ pressed }) => (
                 <View 
-                    className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center" 
+                    className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center bg-red-600" 
                     style={[
                         type === 'primary' ? styles.buttonContainerPrimary : styles.buttonContainerSecondary,
                         pressed && styles.pressedStyle,

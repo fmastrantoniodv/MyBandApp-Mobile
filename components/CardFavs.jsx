@@ -45,38 +45,40 @@ export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSel
     }
 
     return(
-        <View className='flex bg-white w-11/12 rounded-lg justify-start p-3 mt-5 h-4/6'
+        <View className='flex w-12/12 justify-start px-1 h-4/6'
             style={selectedItem === null && styles.fullHeight}
         >
-            <GenericModal 
-                openModal={isOpenModal}
-                closeModal={closeModal} 
-                textBody={modalTextBody}
-                positiveBtn={closeModal}
+            <View className='flex bg-white w-11/12 rounded-lg justify-start p-3 mt-5 flex-shrink'>
+                <GenericModal 
+                    openModal={isOpenModal}
+                    closeModal={closeModal} 
+                    textBody={modalTextBody}
+                    positiveBtn={closeModal}
+                    />
+                <Text className='text-2xl font-semibold mb-3'>
+                    Mis favoritos
+                </Text>
+                {favs && favs[0] !== undefined ?
+                <FlatList
+                    data={favs}
+                    keyExtractor={(favs) => favs.id}
+                    renderItem={({ item, index }) => (
+                        <Pressable onPress={(selectedItem && item.id === selectedItem.id) ? () => setSelectedItem(null) : () => setSelectedItem(item)}>
+                            <ItemFav 
+                                key={item.id} 
+                                favData={item} 
+                                playing={(selectedItem && item.id === selectedItem.id && playing)} 
+                                onPlaybackAction={() => onPlaybackAction(item)}
+                                onUnfav={() => onUnfav(item.id)}
+                                selectedItem={(selectedItem && item.id === selectedItem.id)}
+                                />
+                        </Pressable>
+                    )}
                 />
-            <Text className='text-2xl font-semibold mb-3'>
-                Mis favoritos
-            </Text>
-            {favs && favs[0] !== undefined ?
-            <FlatList
-                data={favs}
-                keyExtractor={(favs) => favs.id}
-                renderItem={({ item, index }) => (
-                    <Pressable onPress={(selectedItem && item.id === selectedItem.id) ? () => setSelectedItem(null) : () => setSelectedItem(item)}>
-                        <ItemFav 
-                            key={item.id} 
-                            favData={item} 
-                            playing={(selectedItem && item.id === selectedItem.id && playing)} 
-                            onPlaybackAction={() => onPlaybackAction(item)}
-                            onUnfav={() => onUnfav(item.id)}
-                            selectedItem={(selectedItem && item.id === selectedItem.id)}
-                            />
-                    </Pressable>
-                )}
-            />
-            :
-            <Text className='text-2xl text-center m-4'>No hay favoritos agregados</Text>
-            }
+                :
+                <Text className='text-2xl text-center m-4'>No hay favoritos agregados</Text>
+                }
+            </View>
         </View>
     )
 }

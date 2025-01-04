@@ -11,19 +11,6 @@ export const planList = [
     { "label": "Pro" , "value": "pro" }
 ]
 
-
-
-export const inputSearchParams = {
-    title: 'Buscar',
-    name: 'searchInput',
-    type: 'text',
-    required: {
-        value: false,
-        message: ''
-    }
-} 
-
-
 export const inputsLogin = [
     {
         title: 'Correo electrónico',
@@ -115,7 +102,7 @@ export const inputsChangePass = [
             value: true,
             message: 'Por favor ingrese su contraseña actual'
         },
-        validate: (value) => passwordRegex.test(value) || 'La contraseña no tiene un formato valido',
+        pattern: { value: passwordRegex, message: 'La contraseña debe ser alfanumérica de al menos 8 caracteres' },
         autoComplete: 'new-password'
     },
     {
@@ -126,7 +113,7 @@ export const inputsChangePass = [
             value: true,
             message: 'El campo no puede ser vacío'
         },
-        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres',
+        pattern: { value: passwordRegex, message: 'La contraseña debe ser alfanumérica de al menos 8 caracteres' },
         autoComplete: 'new-password'
     },
     {
@@ -137,7 +124,7 @@ export const inputsChangePass = [
             value: true,
             message: 'El campo no puede ser vacío'
         },
-        validate: (value) => passwordRegex.test(value) || 'La contraseña debe ser alfanumérica de al menos 8 caracteres',
+        pattern: { value: passwordRegex, message: 'La contraseña debe ser alfanumérica de al menos 8 caracteres' },
         autoComplete: 'new-password'
     }
 ];

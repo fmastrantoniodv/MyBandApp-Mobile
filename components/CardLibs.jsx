@@ -15,7 +15,7 @@ export default function CardLibs({ collections }) {
             console.log('[CardLibs.jsx].[useFocusEffect]')
             setFilteredData(collections)
             setSearchText('')
-        }, [])
+        }, [collections])
     )
 
     const handleSearch = (text) => {
@@ -37,28 +37,28 @@ export default function CardLibs({ collections }) {
       };
 
     return(
-        <View className='flex bg-white w-11/12 rounded-lg justify-center p-3 mt-5'>
-            <Text className='text-2xl font-semibold'>
-                Librerías
-            </Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Buscar por nombre, tags o plan"
-                value={searchText}
-                onChangeText={handleSearch}
-            />
-            {filteredData ?
-                <FlatList
-                    data={filteredData}
-                    keyExtractor={(filteredData) => filteredData.id}
-                    renderItem={({ item, index }) => (
-                        <ItemLib key={item.id} libData={item}/>
-                    )} 
+            <View className='flex bg-white w-11/12 rounded-lg justify-center p-3 mt-5'>
+                <Text className='text-2xl font-semibold'>
+                    Librerías
+                </Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Buscar por nombre, tags o plan"
+                    value={searchText}
+                    onChangeText={handleSearch}
                 />
-                :
-                <Text className='text-2xl text-center m-4'>No hay librerias disponibles</Text>
-            }
-        </View>
+                {filteredData ?
+                    <FlatList
+                        data={filteredData}
+                        keyExtractor={(filteredData) => filteredData.id}
+                        renderItem={({ item, index }) => (
+                            <ItemLib key={item.id} libData={item}/>
+                        )} 
+                    />
+                    :
+                    <Text className='text-2xl text-center m-4'>No hay librerias disponibles</Text>
+                }
+            </View>
     )
 }
 
