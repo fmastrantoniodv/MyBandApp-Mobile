@@ -3,39 +3,39 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Link, useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
-import { login } from '../../services/usersServ';
+import { checkVerifyCode } from '../../services/usersServ';
 import { useUser } from '../../contexts/UserContext';
 import { GenericModal } from '../GenericModal';
 import { useModal } from '../../hooks/useModal';
 import { Loader } from '../Loader';
-import MbaLogoSvg from '../../assets/img/logo.svg'
 import { FormInput } from './FormInput';
-import { inputsLogin } from '../../constants';
+import { inputValidateOtc } from '../../constants';
+import { useNavigation } from "expo-router";
 
-export const FormLogin = () => {
+export const FormVerifyCode = () => {
   const { control, handleSubmit, formState: { errors } } = useForm();
-  const { saveUserData, cleanSession } = useUser()
   const [textBody, setTextBody] = useState('')
   const [isOpenModal, openModal, closeModal] = useModal(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const inputRefs = useRef({});
+  const { user } = useUser()
+  const navigation = useNavigation()
 
   useEffect(()=>{
-    console.log('[formLogin.jsx].useEffect')
+    console.log('[FormVerifyCode.jsx].useEffect')
   }, [])
 
   const onSubmit = async (data) => {
     setLoading(true)
     try {
-      const resp = await login(data)
-      console.log('resp_login: ', resp)
+      const resp = await checkVerifyCode(user.email, data.verify_code)
+      console.log('resp_checkVerifyCode: ', resp)
       if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
-      saveUserData(resp)
       setLoading(false)
-      router.push('/home')
+      router.push('/createNewPass')
     } catch (error) {
-      console.log('login.error=', error)
+      console.log('checkVerifyCode.error=', error)
       setLoading(false)
       setTextBody(error.message)
       openModal()
@@ -45,13 +45,13 @@ export const FormLogin = () => {
 
   return (
     <View className="w-10/12 h-300px bg-white rounded-lg border border-spacing mt-10 p-2 flex-row flex-wrap justify-center">
-      <MbaLogoSvg width={250} height={150}/>
-      <Text className='text-3xl font-semibold' >Iniciar sesión</Text>
-        <Loader loading={loading} />
+      <Loader loading={loading} />
+      <GenericModal openModal={isOpenModal} positiveBtn={closeModal} closeModal={closeModal} textBody={textBody}/>
+      <Text className='text-3xl font-semibold'>Código de verificación</Text>
+      <Text className='text-lg'>Ingresá el código de validación que enviamos a {user.email}</Text>
         <View className='w-full justify-items-center' style={styles.container}>
-          <GenericModal openModal={isOpenModal} positiveBtn={closeModal} closeModal={closeModal} textBody={textBody}/>
-          {inputsLogin.map((input, index)=>{
-            const isLastInput = index === inputsLogin.length - 1;
+          {inputValidateOtc.map((input, index)=>{
+            const isLastInput = index === inputValidateOtc.length - 1;
             return (
               <FormInput
               key={index}
@@ -65,7 +65,7 @@ export const FormLogin = () => {
               returnKeyType={isLastInput ? 'done' : 'next'}
               onSubmitEditing={() => {
                 if (!isLastInput) {
-                  const nextInput = inputsLogin[index + 1].name;
+                  const nextInput = inputValidateOtc  [index + 1].name;
                   inputRefs.current[nextInput]?.focus();
                 } else {
                   handleSubmit(onSubmit)();
@@ -73,9 +73,8 @@ export const FormLogin = () => {
               }}
               />
             )})}
-          <Link href="/forgotPass" className='text-black text-center text-lg mb-7'>Olvide mi contraseña</Link>
-          <FormButton text="Ingresar" type="primary" onPressAction={handleSubmit(onSubmit)} />
-          <FormButton text="Registrarse" type="secondary" onPressAction={() => {router.push('/register')}} />
+          <FormButton text="Enviar código" type="primary" onPressAction={handleSubmit(onSubmit)} />
+          <FormButton text="Volver" type="secondary" onPressAction={() => {navigation.goBack()}} />
         </View>
       </View>
   );
