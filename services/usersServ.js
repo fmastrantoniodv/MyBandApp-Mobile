@@ -111,7 +111,7 @@ export const sendVerifyCode = async (userEmail) => {
         return response
     } catch (error) {
         console.error('[userServ].sendVerifyCode.error=', error)
-        return error.response
+        return error
     }
 }
 
@@ -126,6 +126,6 @@ export const checkVerifyCode = async (userEmail, verificationCode) => {
         return response
     } catch (error) {
         console.error('[userServ].checkVerifyCode.error=', error)
-        return error.response
+        return error
     }
 }

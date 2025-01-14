@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Link, useRouter } from 'expo-router'
+import { Link, useFocusEffect, useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
 import { login } from '../../services/usersServ';
@@ -24,7 +24,7 @@ export const FormLogin = () => {
   useEffect(()=>{
     console.log('[formLogin.jsx].useEffect')
   }, [])
-
+  
   const onSubmit = async (data) => {
     setLoading(true)
     try {

@@ -24,7 +24,7 @@ export const FormVerifyCode = () => {
 
   useEffect(()=>{
     console.log('[FormVerifyCode.jsx].useEffect')
-  }, [])
+  }, [user])
 
   const onSubmit = async (data) => {
     setLoading(true)
@@ -47,9 +47,12 @@ export const FormVerifyCode = () => {
     <View className="w-10/12 h-300px bg-white rounded-lg border border-spacing mt-10 p-2 flex-row flex-wrap justify-center">
       <Loader loading={loading} />
       <GenericModal openModal={isOpenModal} positiveBtn={closeModal} closeModal={closeModal} textBody={textBody}/>
-      <Text className='text-3xl font-semibold'>Código de verificación</Text>
-      <Text className='text-lg'>Ingresá el código de validación que enviamos a {user.email}</Text>
-        <View className='w-full justify-items-center' style={styles.container}>
+      <Text className='text-3xl mt-4 font-semibold'>Código de verificación</Text>
+      {user && <Text className='text-lg font-normal w-12/12 p-4'>
+        Ingresá el código de validación que enviamos a <Text className='font-bold'>{user.email}</Text>
+      </Text>
+      }      
+        <View className='w-full justify-items-center px-4 py-0' style={styles.container}>
           {inputValidateOtc.map((input, index)=>{
             const isLastInput = index === inputValidateOtc.length - 1;
             return (
@@ -73,7 +76,7 @@ export const FormVerifyCode = () => {
               }}
               />
             )})}
-          <FormButton text="Enviar código" type="primary" onPressAction={handleSubmit(onSubmit)} />
+          <FormButton text="Confirmar" type="primary" onPressAction={handleSubmit(onSubmit)} />
           <FormButton text="Volver" type="secondary" onPressAction={() => {navigation.goBack()}} />
         </View>
       </View>

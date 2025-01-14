@@ -72,13 +72,13 @@ export const RewindButton = ({ onPressAction }) => {
 
 export const HamburgerMenuButton = ({ onPressAction }) => {
     return <IconButton onPressAction={() => onPressAction()}>
-        <HamburgerMenuIcon width={25} />
+        <HamburgerMenuIcon width={35} />
     </IconButton>
 }
 
 export const BackButton = ({ onPressAction }) => {
     return <IconButton onPressAction={() => onPressAction()}>
-        <BackArrow width={17} />
+        <BackArrow width={18} />
     </IconButton>
 }
 

@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Link, useRouter } from 'expo-router'
+import { useRouter, useFocusEffect } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
 import { sendVerifyCode } from '../../services/usersServ';
@@ -24,6 +24,7 @@ export const FormForgotPass = () => {
 
   useEffect(()=>{
     console.log('[FormForgotPass.jsx].useEffect')
+    inputRefs.current = {}
   }, [])
 
   const onSubmit = async (data) => {
@@ -31,7 +32,13 @@ export const FormForgotPass = () => {
     try {
       const resp = await sendVerifyCode(data.email)
       console.log('resp_sendVerifyCode: ', resp)
-      if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
+      if(resp.status && resp.status !== 200){
+        if(resp.errorCode && resp.errorCode === 'USR_NOT_FOUND'){
+          throw new Error('No hay un usuario registrado con ese correo electrónico. Intente nuevamente.')
+        }else{
+          throw new Error(resp.errorDetail)
+        }
+      } 
       setLoading(false)
       saveUserData({email: data.email})
       router.push('/verifyCode')
@@ -48,9 +55,9 @@ export const FormForgotPass = () => {
     <View className="w-10/12 h-300px bg-white rounded-lg border border-spacing mt-10 p-2 flex-row flex-wrap justify-center">
       <Loader loading={loading} />
       <GenericModal openModal={isOpenModal} positiveBtn={closeModal} closeModal={closeModal} textBody={textBody}/>
-      <Text className='text-3xl font-semibold' >Olvidé mi contraseña</Text>
-      <Text className='text-lg font-normal'>Ingresá tu correo electrónico registrado para enviarte un código de validación.</Text>
-        <View className='w-full justify-items-center' style={styles.container}>
+      <Text className='text-3xl mt-4 font-semibold' >Olvidé mi contraseña</Text>
+      <Text className='text-lg font-normal w-12/12 p-4'>Ingresá tu correo electrónico registrado para enviarte un código de validación.</Text>
+        <View className='w-full justify-items-center px-4 py-0' style={styles.container}>
           {inputsForgotPass.map((input, index)=>{
             const isLastInput = index === inputsForgotPass.length - 1;
             return (

@@ -35,7 +35,7 @@ export const FormNewPassword = () => {
       console.log('resp_updatePassService: ', resp)
       if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
       setLoading(false)
-      setModalTextBody('¡Contraseña modificada con exito!')
+      setModalTextBody('¡Contraseña modificada con éxito!')
       openModal()
     } catch (error) {
       console.log('[FormNewPassword].[onSubmit].catch=', error)
@@ -53,15 +53,16 @@ export const FormNewPassword = () => {
 
   return (
   <View className="w-10/12 h-300px bg-white rounded-lg border border-spacing mt-10 p-2 flex-row flex-wrap justify-center">
-    <Text className='text-3xl font-semibold mt-5' >Crea tu nueva contraseña</Text>
-      <Loader loading={loading} />
-      <View className='w-full justify-items-center' style={styles.container}>
-        <GenericModal 
-          openModal={isOpenModal}
-          closeModal={onAcept} 
-          textBody={modalTextBody}
-          positiveBtn={error ? closeModal : onAcept}
-        />
+    <Loader loading={loading} />
+    <GenericModal 
+        openModal={isOpenModal}
+        closeModal={onAcept} 
+        textBody={modalTextBody}
+        positiveBtn={error ? closeModal : onAcept}
+      />
+    <Text className='text-3xl font-semibold mt-4' >Nueva contraseña</Text>
+    <Text className='text-lg font-normal w-12/12 p-4'>Ingresá la nueva contraseña que utilizaras.</Text>
+      <View className='w-full justify-items-center px-4 py-0' style={styles.container}>
         {inputsNewPass.map((input, index)=>{
           const isLastInput = index === inputsNewPass.length - 1;
           if(input.type !== 'dropdown'){

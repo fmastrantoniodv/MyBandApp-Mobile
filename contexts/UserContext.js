@@ -19,6 +19,7 @@ export const UserProvider = ({ children }) => {
         expirationPlanDate: '',
         favList: []}
     );
+
     const saveUserData = async (userData) => {
       try {
         await AsyncStorage.setItem('user', JSON.stringify(userData));
@@ -114,6 +115,12 @@ export const UserProvider = ({ children }) => {
         }
       };
 
+    const updateUserPlan = (newPlan) => {
+      var userData = user
+      userData.plan = newPlan
+      saveUserData(userData)
+    }
+
     const isFav = (sampleId) => {
       console.log('[isFav].sampleId=', sampleId)
       if(favs){
@@ -144,7 +151,7 @@ export const UserProvider = ({ children }) => {
     }, [user])
 
     return (
-        <UserContext.Provider value={{ user, saveUserData, clearUser, setPlayingSample, playingSample, sessionState, favs, saveFavsData, isFav, getFavs, updateFavFunc, cleanSession }}>
+        <UserContext.Provider value={{ user, saveUserData, clearUser, setPlayingSample, playingSample, sessionState, favs, saveFavsData, isFav, getFavs, updateFavFunc, cleanSession, updateUserPlan }}>
             {children}
         </UserContext.Provider>
     );

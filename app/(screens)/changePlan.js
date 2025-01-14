@@ -7,6 +7,7 @@ import { useModal } from '../../hooks/useModal'
 import { Loader } from '../../components/Loader'
 import { GenericModal } from '../../components/GenericModal'
 import { useUser } from '../../contexts/UserContext'
+import ChangePlanCard from '../../components/ChangePlanCard'
 
 export default function ChangePlan() {
     const [loading, setLoading] = useState(false)
@@ -40,11 +41,7 @@ export default function ChangePlan() {
             <Loader loading={loading} />
             <GenericModal openModal={isOpenModal} closeModal={closeModal} textBody={textBody} positiveBtn={closeModal}/>
             <View style={styles.container}>
-                <View className='flex bg-white w-11/12 rounded-lg justify-start p-3 mt-5 flex-shrink'>
-                    <Text className='text-2xl font-semibold mb-3'>
-                        Cambiar plan
-                    </Text>
-                </View>
+                <ChangePlanCard />
             </View>
         </Screen>
     )

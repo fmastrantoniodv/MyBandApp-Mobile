@@ -1,14 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Stack } from 'expo-router'
+import { Stack, useFocusEffect } from 'expo-router'
 import { Screen } from '../../components/Screen'
 import { LoginContent } from '../../components/LoginContent'
+import { useUser } from '../../contexts/UserContext'
 
 export default function Login() {
+    const showHeader = false
+    const { cleanSession } = useUser()
     useEffect(()=>{
         console.log('[login.js].useEffect')
     })
-    const showHeader = false
+
+    useFocusEffect(
+        useCallback(() => {
+            console.log('[login.js].[useFocusEffect]')
+            cleanSession()
+        }, [])
+    )
+
     return (
         <Screen withHeader={showHeader}>
             <Stack.Screen 

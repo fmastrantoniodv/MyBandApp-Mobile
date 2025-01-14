@@ -8,9 +8,9 @@ export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const passwordRegex = /^[a-zA-Z0-9]{8,}$/
 export const numberRegex = /^[0-9]{8}$/
 export const planList = [
-    { "label": "Free", "value": "free" },
-    { "label": "Trial", "value": "trial" },
-    { "label": "Pro" , "value": "pro" }
+    { "label": "Free", "value": "free", "price": 0.00, "description": null },
+    { "label": "Trial", "value": "trial", "price": 0.00, "description": "Por 1 mes" },
+    { "label": "Pro" , "value": "pro", "price": 10000.00, "description": "Mensual" }
 ]
 
 export const inputsForgotPass = [
