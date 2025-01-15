@@ -8,14 +8,17 @@ import { GenericModal } from './GenericModal';
 import Constants from 'expo-constants';
 import { useLibs } from '../contexts/LibContext';
 const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
+import { isAvailableWithUserPlan } from '../constants';
+import { useRouter } from 'expo-router';
 
 export default function CardLibDetail({ libData, onPlaybackItem, playing, selectedItem, setSelectedItem }) {    
     const [isOpenModal, openModal, closeModal] = useModal(false)
-    const { favs, isFav, updateFavFunc } = useUser()
+    const { favs, isFav, updateFavFunc, user } = useUser()
     const [modalTextBody, setModalTextBody] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
     const [sampleListLib, setSampleListLib] = useState(null)
+    const router = useRouter()
 
     useEffect(()=>{
         console.log('[CardLibDetail].useEffect')
@@ -41,7 +44,6 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
         console.log('[CardLibDetail.jsx].onfav.itemObj: ', itemObj)
         const resFav = await updateFavFunc(itemId, 'FAV', itemObj)
         console.log('[CardLibDetail.jsx].onFav: ', resFav)
-        console.log('[CardLibDetail.jsx].onFav.updatedFavs=', favs)
         setLoading(false)
         if(resFav !== 'SUCCESS'){
             setError(true)
@@ -50,8 +52,9 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
         }
     }
 
-    const onSubmit = async (data) =>{
-        console.log('onSubmit.data', data)
+    const goToChangePlan = async () =>{
+        console.log('goToChangePlan')
+        router.push(`/changePlan`);
     }
 
     const onPlaybackAction = (libItem) => {
@@ -66,6 +69,24 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
         <View className='flex w-full justify-start h-4/6'
             style={selectedItem === null && styles.fullHeight}
         >
+        {
+        (libData && !isAvailableWithUserPlan(user.plan, libData.plan)) && 
+            <View className='flex bg-white rounded-lg justify-start p-3 m-5 mb-0 flex-shrink' >
+                <Text className='text-sm'>
+                    Tu plan no es compatible con esta librería. Necesitas cambiar tu plan a uno igual o superior a <Text className='font-bold'>{libData.plan}.</Text>
+                </Text>
+                <Pressable onPress={() => goToChangePlan()}>
+                     {({ pressed }) => (
+                                <View 
+                                    className='flex-row'
+                                    style={pressed && styles.pressedStyle}
+                                >
+                                    <Text className='underline text-lg font-bold'>Cambiar plan</Text>
+                                </View>
+                            )}
+                </Pressable>
+            </View>
+        }
             <View className='flex bg-white rounded-lg justify-start p-3 m-5 mb-0 flex-shrink' >
                 <GenericModal 
                     openModal={isOpenModal}
@@ -119,6 +140,7 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
                                             playing={(selectedItem && item.id === selectedItem.id && playing)}
                                             selectedItem={(selectedItem && item.id === selectedItem.id)}
                                             sampleData={item}
+                                            available={isAvailableWithUserPlan(user.plan ,libData.plan)}
                                         />
                                     </Pressable>
                                 )}
@@ -131,10 +153,11 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
             )
 }
 
-function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isFav, selectedItem }) {
+function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isFav, selectedItem, available }) {
     useEffect(()=>{
         console.log('[SampleItem].sampleData=', sampleData)
         console.log('[SampleItem].isFav=', isFav)
+        console.log('[SampleItem].available=', available)
     }, [isFav])
 
     return(
@@ -153,10 +176,12 @@ function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isF
                     <PlayButton onPressAction={onPlaybackAction}/>
                 }
                 {
+                    available && (
                     isFav ?
                     <FavButton onPressAction={onUnfav}/>
                     :
                     <UnfavButton onPressAction={onFav}/>
+                    )
                 }
             </View>
     )

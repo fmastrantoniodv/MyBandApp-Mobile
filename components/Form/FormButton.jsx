@@ -6,7 +6,7 @@ export function FormButton({ type, onPressAction, text, disable }) {
         <Pressable className='flex flex-row justify-center' onPress={disable ? null : () => onPressAction()}>
             {({ pressed }) => (
                 <View 
-                    className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center bg-red-600" 
+                    className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center items-center" 
                     style={[
                         type === 'primary' ? styles.buttonContainerPrimary : styles.buttonContainerSecondary,
                         pressed && styles.pressedStyle,
@@ -24,16 +24,18 @@ export function FormButton({ type, onPressAction, text, disable }) {
         </Pressable>
     )
   }
-  
+
   const styles = StyleSheet.create({
     buttonContainerPrimary: {
         backgroundColor: '#203875',
+        height: 50
     },
     buttonContainerSecondary: {
         backgroundColor: '#D9D9D9',
         borderStyle: 'solid',
         borderColor: '#203875',
-        borderWidth: 2
+        borderWidth: 2,
+        height: 50
     },
     textPrimary: {
         color: '#fff',

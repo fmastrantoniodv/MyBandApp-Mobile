@@ -3,23 +3,23 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
-import { createNewUser } from '../../services/usersServ';
 import { GenericModal } from '../GenericModal';
 import { useModal } from '../../hooks/useModal';
+import { useUser } from '../../contexts/UserContext.js';
 import { Loader } from '../Loader';
 import { inputsRegister } from '../../constants';
 import { FormInput } from './FormInput';
-import { FormSelector } from './FormSelector';
+import { GoBackButton } from '../Buttons.jsx';
 
 export const FormRegister = () => {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm();
   const [modalTextBody, setModalTextBody] = useState('')
   const [isOpenModal, openModal, closeModal] = useModal(false)
   const [loading, setLoading] = useState(false)
-  const [selectedValue, setSelectedValue] = useState('')
   const [error, setError] = useState(false)
   const router = useRouter()
   const inputRefs = useRef({});
+  const { saveUserData } = useUser()
 
   const onSubmit = async (data) => {
     console.log('onSubmit.data=',data);
@@ -27,23 +27,10 @@ export const FormRegister = () => {
       "usrName": data.name,
       "email": data.email,
       "password": data.password,
-      "plan": selectedValue
+      "plan": ''
     }
-    setLoading(true)
-    try {
-      const resp = await createNewUser(body)
-      console.log('resp_register: ', resp)
-      if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
-      setLoading(false)
-      setModalTextBody('¡Usuario creado con exito!')
-      openModal()
-    } catch (error) {
-      console.log('[FormRegister].[onSubmit].catch=', error)
-      setError(true)
-      setModalTextBody(error.message)
-      setLoading(false)
-      openModal()
-    }
+    saveUserData(body)
+    router.push('/selectPlan')
   };  
 
   const onAcept = () => {
@@ -64,34 +51,30 @@ export const FormRegister = () => {
         />
         {inputsRegister.map((input, index)=>{
           const isLastInput = index === inputsRegister.length - 1;
-          if(input.type !== 'dropdown'){
-            return (
-              <FormInput
-                key={index}
-                inputObj={input} 
-                control={control}
-                errors={errors}
-                inputRefs={inputRefs}
-                isLastInput={isLastInput}
-                refInput={(ref) => (inputRefs.current[input.name] = ref)}
-                returnKeyType={isLastInput ? 'done' : 'next'}
-                onSubmitEditing={() => {
-                  if (!isLastInput) {
-                    const nextInput = inputsRegister[index + 1].name;
-                    inputRefs.current[nextInput]?.focus();
-                  } else {
-                    handleSubmit(onSubmit)();
-                  }
-                }}
-                />
-            )
-          }else{
-            return <FormSelector key={index} planList={input.options} titleSelector={input.title} selectedValue={selectedValue} onSelect={setSelectedValue}/>
-          }
+          return (
+            <FormInput
+              key={index}
+              inputObj={input} 
+              control={control}
+              errors={errors}
+              inputRefs={inputRefs}
+              isLastInput={isLastInput}
+              refInput={(ref) => (inputRefs.current[input.name] = ref)}
+              returnKeyType={isLastInput ? 'done' : 'next'}
+              onSubmitEditing={() => {
+                if (!isLastInput) {
+                  const nextInput = inputsRegister[index + 1].name;
+                  inputRefs.current[nextInput]?.focus();
+                } else {
+                  handleSubmit(onSubmit)();
+                }
+              }}
+              />
+          )
         })
         }
-        <FormButton text="Crear usuario" type="primary" disable={isValid && selectedValue !== '' ? false : true} onPressAction={handleSubmit(onSubmit)}/>
-        <FormButton text="Volver" type="secondary" onPressAction={() => {router.push('/')}} />
+        <FormButton text="Continuar" type="primary" disable={isValid ? false : true} onPressAction={handleSubmit(onSubmit)}/>
+        <GoBackButton />
       </View>
     </View>
   );

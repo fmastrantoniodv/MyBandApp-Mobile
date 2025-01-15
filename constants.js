@@ -8,10 +8,17 @@ export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const passwordRegex = /^[a-zA-Z0-9]{8,}$/
 export const numberRegex = /^[0-9]{8}$/
 export const planList = [
-    { "label": "Free", "value": "free", "price": 0.00, "description": null },
-    { "label": "Trial", "value": "trial", "price": 0.00, "description": "Por 1 mes" },
-    { "label": "Pro" , "value": "pro", "price": 10000.00, "description": "Mensual" }
+    { "order": 0, "label": "Free", "value": "free", "price": 0.00, "description": null },
+    { "order": 1, "label": "Trial", "value": "trial", "price": 0.00, "description": "Por 1 mes" },
+    { "order": 2, "label": "Pro" , "value": "pro", "price": 10000.00, "description": "Mensual" }
 ]
+
+export const isAvailableWithUserPlan = (userPlan, libPlan) => {
+    var userPlanOrder = planList.find((item) => item.value === userPlan).order
+    var libPlanOrder = planList.find((item) => item.value === libPlan).order
+    console.log('userPlanOrder >= libPlanOrder ?', userPlanOrder >= libPlanOrder ? true : false)
+    return userPlanOrder >= libPlanOrder ? true : false
+}
 
 export const inputsForgotPass = [
     {
@@ -99,12 +106,6 @@ export const inputsRegister = [
             message: 'Campo obligatorio'
         },
         pattern: { value: passwordRegex, message: 'Formato de contraseña inválido' }
-    },
-    {
-        title: 'Plan',
-        name: 'plan',
-        type: 'dropdown',
-        options: planList
     }
 ]
 

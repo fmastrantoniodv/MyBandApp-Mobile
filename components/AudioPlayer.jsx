@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';  // Cambia esta importación
 import { ENDPOINT_SRC } from '../constants'
 import { PlayButton, PauseButton, RewindButton, FowardButton } from './Buttons'
+import { useFocusEffect } from 'expo-router';
 
 export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
   const sound = useRef(new Audio.Sound());
@@ -11,7 +12,15 @@ export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const audioUrl= `${ENDPOINT_SRC}/api/samples/${selectedItem.collectionCode}/${selectedItem.sampleName}`
-
+  
+  useFocusEffect(
+    useCallback(() => {
+        return () => {
+          sound.current.stopAsync()
+          onPlaying(false);
+        };
+    }, [])
+  )
   // Cargar el archivo de audio
   const loadAudio = async () => {
     setIsLoading(true)

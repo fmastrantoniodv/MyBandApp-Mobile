@@ -45,10 +45,10 @@ export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSel
     }
 
     return(
-        <View className='flex w-12/12 justify-start px-1 h-4/6'
+        <View className='flex w-full justify-start h-4/6'
             style={selectedItem === null && styles.fullHeight}
         >
-            <View className='flex bg-white w-11/12 rounded-lg justify-start p-3 mt-5 flex-shrink'>
+            <View className='flex bg-white w-11/12 rounded-lg justify-start p-3 m-5 mb-0 flex-shrink'>
                 <GenericModal 
                     openModal={isOpenModal}
                     closeModal={closeModal} 

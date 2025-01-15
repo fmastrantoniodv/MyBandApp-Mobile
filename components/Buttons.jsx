@@ -1,4 +1,4 @@
-import { Pressable, View, StyleSheet } from "react-native";
+import { Pressable, View, StyleSheet, Text } from "react-native";
 import FavIcon from '../assets/img/favIcon.svg'
 import PlayIcon from '../assets/img/playIcon.svg'
 import UnfavIcon from '../assets/img/unFavButtonIcon.svg'
@@ -8,6 +8,7 @@ import FowardIcon from '../assets/img/fowardIcon.svg'
 import RewindIcon from '../assets/img/rewindIcon.svg'
 import HamburgerMenuIcon from '../assets/img/menuIcon.svg'
 import BackArrow from '../assets/img/backArrow.svg'
+import { useNavigation } from "expo-router";
 
 export function IconButton({ onPressAction, disable, children }) {
 
@@ -82,11 +83,46 @@ export const BackButton = ({ onPressAction }) => {
     </IconButton>
 }
 
+export function GoBackButton() {
+    const navigation = useNavigation()
+    return (
+        <Pressable className='flex flex-row justify-center' onPress={() => navigation.goBack()}>
+            {({ pressed }) => (
+                <View 
+                    className="w-11/12 rounded-lg m-2 p-2 flex-row justify-center items-center" 
+                    style={[
+                        styles.buttonContainerSecondary,
+                        pressed && styles.pressedStyle,
+                        ]}>
+                        <Text 
+                            className='text-xl font-medium'
+                            style={styles.textSecondary}
+                            >
+                            Volver
+                        </Text>
+                </View>
+            )   
+            }
+        </Pressable>
+    )
+  }
+  
+
 const styles = StyleSheet.create({
 pressedStyle: {
     opacity: 0.7,
     },
 disableStyle: {
-    opacity: 0.7,
+    opacity: 0.7
+},
+buttonContainerSecondary: {
+    backgroundColor: '#D9D9D9',
+    borderStyle: 'solid',
+    borderColor: '#203875',
+    borderWidth: 2,
+    height: 50
+},
+textSecondary: {
+    color: '#203875',
 }
 })
