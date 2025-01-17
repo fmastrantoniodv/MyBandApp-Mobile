@@ -13,16 +13,11 @@ import { GoBackButton } from '../Buttons.jsx';
 
 export const FormRegister = () => {
   const { control, handleSubmit, formState: { errors, isValid } } = useForm();
-  const [modalTextBody, setModalTextBody] = useState('')
-  const [isOpenModal, openModal, closeModal] = useModal(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
   const router = useRouter()
   const inputRefs = useRef({});
   const { saveUserData } = useUser()
 
-  const onSubmit = async (data) => {
-    console.log('onSubmit.data=',data);
+  const onSubmit = async (data) => {    
     const body = {
       "usrName": data.name,
       "email": data.email,
@@ -33,22 +28,10 @@ export const FormRegister = () => {
     router.push('/selectPlan')
   };  
 
-  const onAcept = () => {
-    closeModal()
-    router.push('/')
-  }
-
   return (
   <View className="w-10/12 h-300px bg-white rounded-lg border border-spacing mt-10 p-2 flex-row flex-wrap justify-center">
     <Text className='text-3xl font-semibold mt-5' >Registrarse</Text>
-      <Loader loading={loading} />
       <View className='w-full justify-items-center' style={styles.container}>
-        <GenericModal 
-          openModal={isOpenModal}
-          closeModal={onAcept} 
-          textBody={modalTextBody}
-          positiveBtn={error ? closeModal : onAcept}
-        />
         {inputsRegister.map((input, index)=>{
           const isLastInput = index === inputsRegister.length - 1;
           return (

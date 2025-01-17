@@ -24,7 +24,6 @@ export default function LibDetail() {
     const [playing, setPlaying] = useState(false)
     
     useEffect(() => {
-        console.log('[LibDetail.js].useEffect')
         onLoad()
     }, [])
 

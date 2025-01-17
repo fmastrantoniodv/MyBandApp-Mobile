@@ -21,17 +21,14 @@ export default function ChangePlanCard({ type }) {
     const router = useRouter()
 
     useEffect(() => {
-        console.log('[ChangePlanCard.jsx].useEffect')
         type !== 'OB' && setUserPlan(planList.find((planItem) => planItem.value === user.plan).label)
     }, [])
 
     const onConfirm = async (planInfo) => {
-        console.log('[ChangePlanCard.jsx].onConfirm.planInfo=', planInfo)
         setLoading(true)
         setError(false)
         try {
             const resp = await updatePlan(user.id, planInfo.value)
-            console.log('updatePlan resp=', resp)
             if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
             updateUserPlan(planInfo.value)
             setLoading(false)
@@ -48,19 +45,16 @@ export default function ChangePlanCard({ type }) {
     }
 
     const onCreateUser = async () => {
-        console.log('[ChangePlanCard.jsx].onCreateUser.init')
         try {
             setLoading(true)
             var newUserData = user
             newUserData.plan = selectedItem.value
             const resp = await createNewUser(newUserData)
-            console.log('resp_register: ', resp)
             if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
             setLoading(false)
             setModalTextBody('¡Usuario creado con exito!')
             openModal()
           } catch (error) {
-            console.log('[ChangePlanCard].[onSubmit].catch=', error)
             setError(true)
             setModalTextBody(error.message)
             setLoading(false)
@@ -130,22 +124,32 @@ export default function ChangePlanCard({ type }) {
 }
 
 function ItemPlan({ planData, selectedItem }) {
-    
     return(
             <View 
-                className='flex-row border-black border-2 w-12/12 rounded-lg justify-center p-2 items-center mb-1'
-                style={selectedItem && styles.selectedFav}
+                className='flex-row border-black w-12/12 rounded-lg justify-center p-2 items-center mb-1'
+                style={[
+                    selectedItem ? styles.selectedPlan : styles.itemPlan
+                ]}
             >
                 <View className='flex-1 ml-2 flex-row h-full justify-between items-center'>
-                    <Text className='text-xl flex w-4/12'>{planData.label}</Text>
+                    <Text 
+                        className='text-xl flex w-4/12'
+                        style={ selectedItem && styles.selectedPlanText}>
+                        {planData.label}
+                    </Text>
                     <View className='flex-row items-center w-8/12 justify-between'>
-                        <Text className='text-xl flex mr-2'>
-                            {`$${formatNumberAndSplit(planData.price)[0]},`}
-                            <Text className='text-lg'>
-                            {`${formatNumberAndSplit(planData.price)[1]}`}
-                            </Text>
+                        <Text 
+                            className='text-xl flex mr-2'
+                            style={ selectedItem && styles.selectedPlanText}>
+                                {`$${formatNumberAndSplit(planData.price)[0]},`}
+                                <Text className='text-lg'>
+                                {`${formatNumberAndSplit(planData.price)[1]}`}
+                                </Text>
                         </Text>
-                        {planData.description && <Text className='text-l flex'>{`${planData.description}`}</Text>}
+                        {planData.description && <Text className='text-l flex'
+                        style={ selectedItem && styles.selectedPlanText}>
+                            {`${planData.description}`}
+                        </Text>}
                     </View>
                 </View>
             </View>
@@ -154,14 +158,13 @@ function ItemPlan({ planData, selectedItem }) {
 
 function formatNumberAndSplit(number) {
     const formatted = number
-        .toFixed(2) // Asegura que siempre haya dos decimales
-        .replace('.', ',') // Reemplaza el punto por la coma
-        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Agrega el separador de miles
+        .toFixed(2)
+        .replace('.', ',')
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 
-    // Separar la parte entera y los decimales
     const [integers, decimals] = formatted.split(',');
 
-    return [integers, decimals] // Array con enteros y decimales
+    return [integers, decimals]
 }
 
 const styles = StyleSheet.create({
@@ -171,7 +174,15 @@ const styles = StyleSheet.create({
     fullHeight: {
         height: 'auto'
     },
-    selectedFav: {
-        backgroundColor: '#cbcbcb'
+    itemPlan: {
+        borderColor: '#000',
+        borderWidth: 1
+    },
+    selectedPlan: {
+        borderColor: '#000',
+        borderWidth: 3
+    },
+    selectedPlanText: {
+        fontWeight: 700
     }
 })

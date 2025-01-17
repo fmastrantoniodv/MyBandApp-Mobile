@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Stack } from 'expo-router'
 import { Screen } from '../../components/Screen'
 import { FormVerifyCode } from '../../components/Form/FormVerifyCode'
 
 export default function ForgotPass() {
-    useEffect(()=>{
-        console.log('[ForgotPass.js].useEffect')
-    })
     const showHeader = false
     return (
         <Screen withHeader={showHeader}>

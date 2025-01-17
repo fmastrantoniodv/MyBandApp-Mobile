@@ -1,5 +1,5 @@
-import React, { useEffect, useCallback } from 'react'
-import { View, StyleSheet } from 'react-native'
+import React, { useCallback } from 'react'
+import { View, StyleSheet, BackHandler, Alert } from 'react-native'
 import { Stack, useFocusEffect } from 'expo-router'
 import { Screen } from '../../components/Screen'
 import { LoginContent } from '../../components/LoginContent'
@@ -8,14 +8,22 @@ import { useUser } from '../../contexts/UserContext'
 export default function Login() {
     const showHeader = false
     const { cleanSession } = useUser()
-    useEffect(()=>{
-        console.log('[login.js].useEffect')
-    })
 
     useFocusEffect(
         useCallback(() => {
-            console.log('[login.js].[useFocusEffect]')
             cleanSession()
+            const backAction = () => {
+                Alert.alert("Salir de My Band App", "¿Estás seguro de que quieres salir?", [
+                    {
+                        text: "Cancelar",
+                        style: "cancel",
+                    },
+                    { text: "Salir", onPress: () => BackHandler.exitApp() },
+                ])
+                return true
+            };
+            const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+            return () => backHandler.remove();
         }, [])
     )
 

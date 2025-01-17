@@ -1,5 +1,5 @@
 import { Stack } from "expo-router"
-import { Pressable, View, Text } from "react-native"
+import { View } from "react-native"
 import MbaLogoSvg from '../assets/img/logo.svg'
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { UserProvider } from '../contexts/UserContext';
@@ -13,10 +13,6 @@ export default function Layout() {
     const [menuVisible, setMenuVisible] = useState(false);
     const navigation = useNavigation()
 
-    const handleMenuOptionSelect = (option) => {
-      console.log(`Opción seleccionada: ${option}`);     
-    }
-  
     const toggleMenu = () => {
         setMenuVisible(!menuVisible);
     }
@@ -29,7 +25,6 @@ export default function Layout() {
                     <HamburgerMenu 
                         isVisible={menuVisible}
                         toggleMenu={toggleMenu} 
-                        onOptionSelect={handleMenuOptionSelect} 
                     /> 
                         <View className="flex-1">
                             <Stack

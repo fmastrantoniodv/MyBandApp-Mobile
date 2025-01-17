@@ -26,13 +26,11 @@ export const FormNewPassword = () => {
   const { user } = useUser()
 
   const onSubmit = async (data) => {
-    console.log('onSubmit.data=',data);
     setError(false)
     setLoading(true)
     try {
       if(data.firstPassword !== data.secondPassword) throw new Error('Las contraseñas ingresadas no coinciden');
       const resp = await updatePassService(user.email, data.firstPassword)
-      console.log('resp_updatePassService: ', resp)
       if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
       setLoading(false)
       setModalTextBody('¡Contraseña modificada con éxito!')

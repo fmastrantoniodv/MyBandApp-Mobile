@@ -1,6 +1,5 @@
-import { useNavigation } from "expo-router";
 import Constants from 'expo-constants';
-const { ENDPOINT_BACKEND, TIMEOUT_SERVICES } = Constants.expoConfig.extra;
+const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 
 export const ENDPOINT_SRC = ENDPOINT_BACKEND
 
@@ -16,7 +15,6 @@ export const planList = [
 export const isAvailableWithUserPlan = (userPlan, libPlan) => {
     var userPlanOrder = planList.find((item) => item.value === userPlan).order
     var libPlanOrder = planList.find((item) => item.value === libPlan).order
-    console.log('userPlanOrder >= libPlanOrder ?', userPlanOrder >= libPlanOrder ? true : false)
     return userPlanOrder >= libPlanOrder ? true : false
 }
 

@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Screen } from '../../components/Screen'
 import CardFavs from '../../components/CardFavs'
 import { getUserFavsServ } from '../../services/usersServ'
@@ -9,7 +9,6 @@ import { Loader } from '../../components/Loader'
 import { GenericModal } from '../../components/GenericModal'
 import { useUser } from '../../contexts/UserContext'
 import { AudioPlayer } from '../../components/AudioPlayer'
-
 
 export default function Favs() {
     const [loading, setLoading] = useState(false)
@@ -21,7 +20,6 @@ export default function Favs() {
     const [playing, setPlaying] = useState(false)
     
     useEffect(() => {
-      console.log('[Favs.js].useEffect')
       onLoad()
     }, [])
 

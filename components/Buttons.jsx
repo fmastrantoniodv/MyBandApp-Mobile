@@ -72,15 +72,33 @@ export const RewindButton = ({ onPressAction }) => {
 }
 
 export const HamburgerMenuButton = ({ onPressAction }) => {
-    return <IconButton onPressAction={() => onPressAction()}>
-        <HamburgerMenuIcon width={35} />
-    </IconButton>
+    return <Pressable className='flex flex-row justify-end items-center w-12 h-12' onPress={() => onPressAction()}>
+            {({ pressed }) => (
+        <View 
+            className='mx-1'
+            style={[
+                pressed && styles.pressedStyle
+                ]}>
+                    <HamburgerMenuIcon width={35} />
+        </View>
+    )}
+</Pressable>
+        
 }
 
 export const BackButton = ({ onPressAction }) => {
-    return <IconButton onPressAction={() => onPressAction()}>
-        <BackArrow width={18} />
-    </IconButton>
+    return <Pressable className='flex flex-row justify-start w-10' onPress={() => onPressAction()}>
+    {({ pressed }) => (
+        <View 
+            className='mx-1'
+            style={[
+                pressed && styles.pressedStyle
+                ]}>
+                <BackArrow width={18} />
+        </View>
+    )}
+</Pressable>
+    
 }
 
 export function GoBackButton() {

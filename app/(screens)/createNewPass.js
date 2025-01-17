@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Stack } from 'expo-router'
 import { Screen } from '../../components/Screen'
 import { FormNewPassword } from '../../components/Form/FormNewPassword'
 
 export default function CreateNewPass() {
-    useEffect(()=>{
-        console.log('[CreateNewPass.js].useEffect')
-    })
     const showHeader = false
     return (
         <Screen withHeader={showHeader}>

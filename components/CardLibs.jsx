@@ -12,7 +12,6 @@ export default function CardLibs({ collections }) {
 
     useFocusEffect(
         useCallback(() => {
-            console.log('[CardLibs.jsx].[useFocusEffect]')
             setFilteredData(collections)
             setSearchText('')
         }, [collections])

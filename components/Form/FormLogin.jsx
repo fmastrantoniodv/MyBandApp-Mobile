@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Link, useFocusEffect, useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
 import { login } from '../../services/usersServ';
@@ -14,22 +14,17 @@ import { inputsLogin } from '../../constants';
 
 export const FormLogin = () => {
   const { control, handleSubmit, formState: { errors } } = useForm();
-  const { saveUserData, cleanSession } = useUser()
+  const { saveUserData } = useUser()
   const [textBody, setTextBody] = useState('')
   const [isOpenModal, openModal, closeModal] = useModal(false)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const inputRefs = useRef({});
 
-  useEffect(()=>{
-    console.log('[formLogin.jsx].useEffect')
-  }, [])
-  
   const onSubmit = async (data) => {
     setLoading(true)
     try {
       const resp = await login(data)
-      console.log('resp_login: ', resp)
       if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
       saveUserData(resp)
       setLoading(false)

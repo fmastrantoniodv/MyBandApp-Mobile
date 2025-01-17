@@ -1,15 +1,13 @@
+import { useRouter } from 'expo-router';
 import { View, Text, Pressable, StyleSheet, Image, FlatList } from 'react-native'
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import { FavButton, UnfavButton, PlayButton, PauseButton } from './Buttons'
 import { useUser } from '../contexts/UserContext';
 import { useModal } from '../hooks/useModal';
 import { GenericModal } from './GenericModal';
 import Constants from 'expo-constants';
-import { useLibs } from '../contexts/LibContext';
 const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 import { isAvailableWithUserPlan } from '../constants';
-import { useRouter } from 'expo-router';
 
 export default function CardLibDetail({ libData, onPlaybackItem, playing, selectedItem, setSelectedItem }) {    
     const [isOpenModal, openModal, closeModal] = useModal(false)
@@ -21,13 +19,10 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
     const router = useRouter()
 
     useEffect(()=>{
-        console.log('[CardLibDetail].useEffect')
-        console.log('[CardLibDetail].libData=', libData)
         libData && setSampleListLib(libData.sampleList)
     }, [libData])
 
     const onUnfav = async (itemId) => {
-        console.log('[CardLibDetail.jsx].onUnfav.itemId=', itemId)
         const resUnFav = await updateFavFunc(itemId, 'UNFAV', null)
         console.log('onUnfav: ', resUnFav)
         setLoading(false)
@@ -39,11 +34,8 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
     }
 
     const onFav = async (itemId, itemObj) => {
-        console.log(`[CardLibDetail.jsx].onfav.itemId=${itemId}`)
         itemObj.collectionName = libData.collectionName
-        console.log('[CardLibDetail.jsx].onfav.itemObj: ', itemObj)
         const resFav = await updateFavFunc(itemId, 'FAV', itemObj)
-        console.log('[CardLibDetail.jsx].onFav: ', resFav)
         setLoading(false)
         if(resFav !== 'SUCCESS'){
             setError(true)
@@ -53,7 +45,6 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
     }
 
     const goToChangePlan = async () =>{
-        console.log('goToChangePlan')
         router.push(`/changePlan`);
     }
 
@@ -71,7 +62,7 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
         >
         {
         (libData && !isAvailableWithUserPlan(user.plan, libData.plan)) && 
-            <View className='flex bg-white rounded-lg justify-start p-3 m-5 mb-0 flex-shrink' >
+            <View className='flex bg-white rounded-lg justify-start p-3 m-5 mb-0' >
                 <Text className='text-sm'>
                     Tu plan no es compatible con esta librería. Necesitas cambiar tu plan a uno igual o superior a <Text className='font-bold'>{libData.plan}.</Text>
                 </Text>
@@ -154,12 +145,6 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
 }
 
 function SampleItem({ sampleData, playing, onPlaybackAction, onUnfav, onFav, isFav, selectedItem, available }) {
-    useEffect(()=>{
-        console.log('[SampleItem].sampleData=', sampleData)
-        console.log('[SampleItem].isFav=', isFav)
-        console.log('[SampleItem].available=', available)
-    }, [isFav])
-
     return(
             <View 
                 className='flex-row border-black border-t-2 w-12/12 justify-center py-2 items-center'

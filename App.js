@@ -8,7 +8,7 @@ export default function App() {
     <View className="bg-white items-center justify-center">
       <StatusBar style="auto" />
       <MbaLogoSvg width={300} height={300}/>
-      <Text>My band app</Text>
+      <Text>My Band App</Text>
     </View>
   )
 }

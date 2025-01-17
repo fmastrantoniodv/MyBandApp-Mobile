@@ -23,7 +23,6 @@ export const UserProvider = ({ children }) => {
     const saveUserData = async (userData) => {
       try {
         await AsyncStorage.setItem('user', JSON.stringify(userData));
-        console.log('Datos guardados');
         loadUserData()
       } catch (error) {
         console.error('Error al guardar datos', error);
@@ -33,7 +32,6 @@ export const UserProvider = ({ children }) => {
     const saveFavsData = async (favsData) => {
       try {
         await AsyncStorage.setItem('favs', JSON.stringify(favsData));
-        console.log('Favs guardados');
         loadFavsData()
       } catch (error) {
         console.error('Error al guardar datos', error);
@@ -99,7 +97,6 @@ export const UserProvider = ({ children }) => {
         try {
           await AsyncStorage.removeItem('favs');
           setFavs(null); // Limpia el estado local también
-          console.log('Favs eliminados');
         } catch (error) {
           console.error('Error al eliminar favs', error);
         }
@@ -109,7 +106,6 @@ export const UserProvider = ({ children }) => {
         try {
           await AsyncStorage.removeItem('user');
           setUser(null); // Limpia el estado local también
-          console.log('info user eliminada');
         } catch (error) {
           console.error('Error al eliminar info User', error);
         }
@@ -122,13 +118,10 @@ export const UserProvider = ({ children }) => {
     }
 
     const isFav = (sampleId) => {
-      console.log('[isFav].sampleId=', sampleId)
       if(favs){
         var result = favs.some(sample => sampleId === sample.id)
-        console.log('[isFav].result=', result)
         return result
       }else{
-        console.log('[isFav].favs falsy')
         return false
       }
     }
@@ -140,11 +133,8 @@ export const UserProvider = ({ children }) => {
     }
 
     useEffect(()=>{
-      console.log('[UserContext.js].[useEffect].user', user)
       if(user){
-          console.log('UserProvider.useEffect.user.id=', user.id)
           setSessionState(true)
-          console.log('UserProvider.useEffect.sessionState=', sessionState)
         }else{
           cleanSession()
         }

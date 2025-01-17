@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useRouter, useFocusEffect } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
 import { sendVerifyCode } from '../../services/usersServ';
@@ -23,7 +23,6 @@ export const FormForgotPass = () => {
   const navigation = useNavigation()
 
   useEffect(()=>{
-    console.log('[FormForgotPass.jsx].useEffect')
     inputRefs.current = {}
   }, [])
 
@@ -31,7 +30,6 @@ export const FormForgotPass = () => {
     setLoading(true)
     try {
       const resp = await sendVerifyCode(data.email)
-      console.log('resp_sendVerifyCode: ', resp)
       if(resp.status && resp.status !== 200){
         if(resp.errorCode && resp.errorCode === 'USR_NOT_FOUND'){
           throw new Error('No hay un usuario registrado con ese correo electrónico. Intente nuevamente.')

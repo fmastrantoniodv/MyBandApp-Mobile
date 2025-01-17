@@ -83,12 +83,16 @@ export function HamburgerMenu({ isVisible, toggleMenu }) {
 const MenuButton = ({action, title, last}) => {
   return(
     <Pressable onPress={() => action()}>
-      <Text style={[
-        styles.menuOption,
-        last && styles.lastOption
-        ]}>
-        {title}
-      </Text>
+      {({ pressed }) => (
+        <Text style={[
+          styles.menuOption,
+          last && styles.lastOption,
+          pressed && styles.optionMenuPressedStyle
+          ]}>
+          {title}
+        </Text>
+      )
+      }
     </Pressable>
   )
 }
@@ -122,5 +126,8 @@ const styles = StyleSheet.create({
   },
   closeMenuContainer: {
     height: 70
-  }
+  },
+  optionMenuPressedStyle: {
+    backgroundColor: '#cbcbcb'
+    },
 });

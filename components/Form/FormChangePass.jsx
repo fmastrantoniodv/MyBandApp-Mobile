@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text } from 'react-native';
 import { useNavigation } from 'expo-router'
 import { useForm } from 'react-hook-form';
@@ -21,18 +21,12 @@ export const FormChangePass = () => {
   const inputRefs = useRef({});
   const { user } = useUser()
 
-  useEffect(()=>{
-    console.log('[FormChangePass.jsx].useEffect')
-  }, [])
-
   const onSubmit = async (data) => {
     setLoading(true)
     setError(false)
     try {
-      console.log('[FormChangePass].onSubmit.data=', data)
       if(data.firstPassword !== data.secondPassword) throw new Error('Las nuevas contraseñas no coinciden')
       const resp = await changePassService(user.email, data.currentPassword, data.secondPassword)
-      console.log('changePassService resp=', resp)
       if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
       setLoading(false)
       setTextBody('¡Modificaste tu contraseña con éxito!')

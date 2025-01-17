@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { Screen } from '../../components/Screen'
 import { ButtonGoFavs} from '../../components/CardFavs'
 import CardLibs from '../../components/CardLibs'
@@ -37,7 +37,6 @@ export default function Home() {
     const getLibs = async () => {
         try {
             const resp = await getCollections('pro')
-            console.log('respCollections: ', resp)
             if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)            
             saveLibsData(resp)
         } catch (error) {

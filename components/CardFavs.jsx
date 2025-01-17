@@ -15,14 +15,11 @@ export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSel
     const [error, setError] = useState(false)
 
     useEffect(() => {
-        console.log('[CardFavs].useEffect')
         getFavs()
     }, [])
 
     const onUnfav = async (itemId) => {
-        console.log('[CardLibDetail.jsx].onUnfav.itemId=', itemId)
         const resUnFav = await updateFavFunc(itemId, 'UNFAV', null)
-        console.log('onUnfav: ', resUnFav)
         setLoading(true)
         if(resUnFav !== 'SUCCESS'){
             setError(true)
@@ -84,10 +81,6 @@ export default function CardFavs({ onPlaybackItem, playing, selectedItem, setSel
 }
 
 function ItemFav({ favData, playing, onPlaybackAction, onUnfav, selectedItem }) {
-    useEffect(()=>{
-        console.log('[ItemFav].favData=', favData)
-    }, [])
-
     return(
             <View 
                 className='flex-row border-black border-2 w-12/12 rounded-lg justify-center p-3 items-center'

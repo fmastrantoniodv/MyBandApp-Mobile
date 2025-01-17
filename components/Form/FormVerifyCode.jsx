@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Link, useRouter } from 'expo-router'
+import { useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
 import { checkVerifyCode } from '../../services/usersServ';
@@ -22,15 +22,10 @@ export const FormVerifyCode = () => {
   const { user } = useUser()
   const navigation = useNavigation()
 
-  useEffect(()=>{
-    console.log('[FormVerifyCode.jsx].useEffect')
-  }, [user])
-
   const onSubmit = async (data) => {
     setLoading(true)
     try {
       const resp = await checkVerifyCode(user.email, data.verify_code)
-      console.log('resp_checkVerifyCode: ', resp)
       if(resp.status && resp.status !== 200) throw new Error(resp.errorDetail)
       setLoading(false)
       router.push('/createNewPass')

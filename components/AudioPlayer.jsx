@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
 import Slider from '@react-native-community/slider';  // Cambia esta importación
 import { ENDPOINT_SRC } from '../constants'
@@ -21,7 +21,7 @@ export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
         };
     }, [])
   )
-  // Cargar el archivo de audio
+  
   const loadAudio = async () => {
     setIsLoading(true)
     try {
@@ -29,9 +29,8 @@ export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
         { uri: audioUrl },
         { shouldPlay: false }
       )
-      console.log('[AudioPlayer.jsx].loadAudio.audioSource=', audioSource)
       sound.current.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
-      setDuration(audioSource.durationMillis / 1000); // convertir milisegundos a segundos
+      setDuration(audioSource.durationMillis / 1000)
       autoPlayOnLoad()
     } catch (error) {
       console.error('Error al cargar el audio:', error);
@@ -39,14 +38,12 @@ export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
     setIsLoading(false);
   }
 
-  // Actualizar estado con la información de la reproducción
   const onPlaybackStatusUpdate = (status) => {
     if (status.isLoaded) {
       setPosition(status.positionMillis / 1000)
     }
   };
 
-  // Iniciar o pausar el audio
   const togglePlayback = async () => {
     if (playing) {
       await sound.current.pauseAsync()
@@ -80,7 +77,6 @@ export const AudioPlayer = ({ selectedItem, playing, onPlaying }) => {
   };
 
   useEffect(() => {
-    console.log('[AudioPlayer.jsx].useEffect.audioUrl=', audioUrl)
     loadAudio()
     return () => {
       sound.current.unloadAsync();

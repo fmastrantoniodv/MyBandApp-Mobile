@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const LibsContext = createContext();
@@ -10,7 +10,6 @@ export const LibsProvider = ({ children }) => {
     const saveLibsData = async (libsData) => {
         try {
           await AsyncStorage.setItem('libs', JSON.stringify(libsData));
-          console.log('Datos guardados');
           loadLibsData()
         } catch (error) {
           console.error('Error al guardar datos', error);
@@ -32,16 +31,10 @@ export const LibsProvider = ({ children }) => {
         try {
           await AsyncStorage.removeItem('libs');
           setLibs(null); // Limpia el estado local también
-          console.log('Datos eliminados');
         } catch (error) {
           console.error('Error al eliminar datos', error);
         }
       };
-
-    useEffect(()=>{
-      console.log('LibsProvider.useEffect')
-      //console.log('LibsProvider.useEffect.libs.id=', libs.id)
-    }, [libs])
 
     return (
         <LibsContext.Provider value={{ libs, saveLibsData, clearLibs, setPlayingSample, playingSample }}>

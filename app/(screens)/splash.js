@@ -13,7 +13,6 @@ export default function Splash() {
       console.log(router.dismiss())
       if(router){
         console.log(router.dismiss())
-        //router.push('/login')
       }
     }, [router])
 

@@ -17,7 +17,6 @@ httpClient.interceptors.response.use(
     (error) => {
         if (error.response) {
             // El servidor respondió con un código fuera del rango 2xx
-            console.error(`[httpClient].error=`, error.response);
             const { status, data } = error.response;
             console.error(`Error ${status}: ${data?.errorDetail || 'Error desconocido'}`);
             return Promise.reject({
