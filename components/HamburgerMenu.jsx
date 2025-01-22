@@ -43,7 +43,7 @@ export function HamburgerMenu({ isVisible, toggleMenu }) {
         <View className='w-12/12 flex-row justify-end items-center pr-3'
         style={styles.closeMenuContainer}
         >
-          <CloseButton onPressAction={() => closeMenu()}/>
+          <CloseButton onPressAction={closeMenu}/>
         </View>
         <View style={[
           styles.menuContent

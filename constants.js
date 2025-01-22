@@ -1,16 +1,26 @@
 import Constants from 'expo-constants';
+import { getPlanList } from './services/appConfigServ';
 const { ENDPOINT_BACKEND } = Constants.expoConfig.extra;
 
 export const ENDPOINT_SRC = ENDPOINT_BACKEND
+export var planList
+export const getPlanListFromServer = async () => {
+    const result = await getPlanList()
+    planList = result
+}
 
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const passwordRegex = /^[a-zA-Z0-9]{8,}$/
 export const numberRegex = /^[0-9]{8}$/
+/*
 export const planList = [
     { "order": 0, "label": "Free", "value": "free", "price": 0.00, "description": null },
     { "order": 1, "label": "Trial", "value": "trial", "price": 0.00, "description": "Por 1 mes" },
     { "order": 2, "label": "Pro" , "value": "pro", "price": 10000.00, "description": "Mensual" }
 ]
+*/
+
+getPlanListFromServer()
 
 export const isAvailableWithUserPlan = (userPlan, libPlan) => {
     var userPlanOrder = planList.find((item) => item.value === userPlan).order

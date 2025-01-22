@@ -54,9 +54,21 @@ export const PauseButton = ({ onPressAction }) => {
 }
 
 export const CloseButton = ({ onPressAction }) => {
-    return <IconButton onPressAction={() => onPressAction()}>
-        <CloseIcon width={25} height={25} />
-    </IconButton>
+    return <Pressable 
+                className='flex flex-row bg-white'
+                onPress={() => onPressAction()}
+                hitSlop={20}
+            >
+                {({ pressed }) => (
+                    <View 
+                        className='mx-1 w-14 h-14 flex-row justify-end items-center'
+                        style={[
+                            pressed && styles.pressedStyle
+                        ]}>
+                        <CloseIcon width={25} height={25} />
+                    </View>
+                )}
+            </Pressable>
 }
 
 export const FowardButton = ({ onPressAction }) => {
@@ -69,36 +81,6 @@ export const RewindButton = ({ onPressAction }) => {
     return <IconButton onPressAction={() => onPressAction()}>
         <RewindIcon width={35} />
     </IconButton>
-}
-
-export const HamburgerMenuButton = ({ onPressAction }) => {
-    return <Pressable className='flex flex-row justify-end items-center w-12 h-12' onPress={() => onPressAction()}>
-            {({ pressed }) => (
-        <View 
-            className='mx-1'
-            style={[
-                pressed && styles.pressedStyle
-                ]}>
-                    <HamburgerMenuIcon width={35} />
-        </View>
-    )}
-</Pressable>
-        
-}
-
-export const BackButton = ({ onPressAction }) => {
-    return <Pressable className='flex flex-row justify-start w-10' onPress={() => onPressAction()}>
-    {({ pressed }) => (
-        <View 
-            className='mx-1'
-            style={[
-                pressed && styles.pressedStyle
-                ]}>
-                <BackArrow width={18} />
-        </View>
-    )}
-</Pressable>
-    
 }
 
 export function GoBackButton() {
@@ -124,6 +106,45 @@ export function GoBackButton() {
         </Pressable>
     )
   }
+
+export const HamburgerMenuButton = ({ onPressAction }) => {
+    return <Pressable 
+                className='flex flex-row justify-end items-center' 
+                pressRetentionOffset={{ top: 10, left: 10, right: 10, bottom: 10 }}
+                hitSlop={5}
+                onPressIn={() => onPressAction()}
+                >
+            {({ pressed }) => (
+        <View 
+            className='mx-1 w-14 h-14 flex-row justify-end items-center'
+            style={[
+                pressed && styles.pressedStyle
+            ]}>
+                <HamburgerMenuIcon width={35} />
+        </View>
+    )}
+</Pressable>     
+}
+
+export const BackButton = ({ onPressAction }) => {
+    return <Pressable 
+                className='flex flex-row justify-start' 
+                pressRetentionOffset={{ top: 10, left: 10, right: 10, bottom: 10 }}
+                hitSlop={5}
+                onPressIn={() => onPressAction()}
+                >
+    {({ pressed }) => (
+        <View 
+            className='mx-1 w-14 h-14 flex-row justify-start items-center'
+            style={[
+                pressed && styles.pressedStyle
+            ]}>
+                    <BackArrow width={18} />
+        </View>
+    )}
+</Pressable>
+}
+
   
 
 const styles = StyleSheet.create({

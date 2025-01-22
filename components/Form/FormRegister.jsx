@@ -1,12 +1,9 @@
-import React, { useRef, useState} from 'react';
+import React, { useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form';
 import { FormButton } from './FormButton';
-import { GenericModal } from '../GenericModal';
-import { useModal } from '../../hooks/useModal';
 import { useUser } from '../../contexts/UserContext.js';
-import { Loader } from '../Loader';
 import { inputsRegister } from '../../constants';
 import { FormInput } from './FormInput';
 import { GoBackButton } from '../Buttons.jsx';
@@ -37,6 +34,7 @@ export const FormRegister = () => {
           return (
             <FormInput
               key={index}
+              autoCapitalize={input.name === 'name' ? 'sentences' : 'none'}
               inputObj={input} 
               control={control}
               errors={errors}

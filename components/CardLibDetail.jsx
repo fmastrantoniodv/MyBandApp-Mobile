@@ -99,10 +99,16 @@ export default function CardLibDetail({ libData, onPlaybackItem, playing, select
                                     <Text className='text-xl font-medium'>
                                         {libData.collectionName}
                                     </Text>
-                                    <View className='flex-row mt-2 overflow-hidden'>
-                                        {libData.tags.map((tag)=>{
-                                            return <Text key={tag} className='bg-slate-400 p-1 rounded-xl mr-2 text-sm'>{tag}</Text>
-                                        })}
+                                    <View className='flex-row flex-wrap mt-2 w-10/12'>
+                                        <FlatList
+                                            data={libData.tags}
+                                            horizontal
+                                            keyExtractor={(tag) => tag}
+                                            renderItem={({ item }) => (
+                                                <Text key={item} className='bg-slate-400 py-1 px-2 rounded-xl mr-2 text-sm'>{item}</Text>
+                                            )}
+                                            showsHorizontalScrollIndicator={false}
+                                            />
                                     </View>
                                     <Text className='text-lg font-medium'>
                                         Plan: {libData.plan}

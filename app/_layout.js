@@ -5,27 +5,27 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { UserProvider } from '../contexts/UserContext';
 import { LibsProvider } from "../contexts/LibContext";
 import { HamburgerMenu } from "../components/HamburgerMenu";
-import { useState } from "react";
-import { HamburgerMenuButton, BackButton } from '../components/Buttons'
+import { useCallback, useEffect, useState } from "react";
 import { useNavigation } from "expo-router";
+import { BackButton, HamburgerMenuButton } from "../components/Buttons";
       
 export default function Layout() {
     const [menuVisible, setMenuVisible] = useState(false);
     const navigation = useNavigation()
-
-    const toggleMenu = () => {
-        setMenuVisible(!menuVisible);
-    }
+    
+    const toggleMenu = useCallback(() => {
+        setMenuVisible(prev => !prev)
+    }, []);
 
     return (
         <>
-            <SafeAreaProvider>
-                <UserProvider>
-                    <LibsProvider>
-                    <HamburgerMenu 
-                        isVisible={menuVisible}
-                        toggleMenu={toggleMenu} 
-                    /> 
+            <UserProvider>
+                <LibsProvider>
+                    <SafeAreaProvider>
+                        <HamburgerMenu 
+                            isVisible={menuVisible}
+                            toggleMenu={toggleMenu} 
+                        />
                         <View className="flex-1">
                             <Stack
                                 screenOptions={{
@@ -37,12 +37,14 @@ export default function Layout() {
                                     headerRight: () => <HamburgerMenuButton onPressAction={toggleMenu}/>,
                                     headerLeft: () => <BackButton onPressAction={() => navigation.goBack()}/>,
                                     headerBackButtonDisplayMode: "minimal",
+                                    animationEnabled: true,
+                                    gestureEnabled: true
                                 }}
                             />
                         </View>
-                    </LibsProvider>
-                </UserProvider>
-            </SafeAreaProvider>
+                    </SafeAreaProvider>
+                </LibsProvider>
+            </UserProvider>
         </>
     )
 }

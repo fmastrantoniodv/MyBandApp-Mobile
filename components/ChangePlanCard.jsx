@@ -95,13 +95,13 @@ export default function ChangePlanCard({ type }) {
                 {
                     planList !== undefined ?
                         <FlatList
-                        className='mb-2'
+                            className='mb-2'
                             data={planList}
-                            keyExtractor={(planList) => planList.id}
+                            keyExtractor={(planList) => planList.value}
                             renderItem={({ item, index }) => (
-                                <Pressable onPress={(selectedItem && item.value === selectedItem.value) ? () => setSelectedItem(null) : () => setSelectedItem(item)}>
+                                <Pressable key={item.value} onPress={(selectedItem && item.value === selectedItem.value) ? () => setSelectedItem(null) : () => setSelectedItem(item)}>
                                     <ItemPlan 
-                                        key={item.value} 
+                                        key={item.value}
                                         planData={item} 
                                         selectedItem={(selectedItem && item.value === selectedItem.value)}
                                         />
@@ -113,9 +113,9 @@ export default function ChangePlanCard({ type }) {
                 }
                 {
                     type === 'OB' ?
-                        <FormButton text="Crear usuario" type="primary" onPressAction={() => onCreateUser(selectedItem)} disable={false} />
+                        <FormButton text="Crear usuario" type="primary" onPressAction={() => onCreateUser(selectedItem)} disable={selectedItem ? false : true} />
                     :
-                        <FormButton text="Confirmar plan" type="primary" onPressAction={() => onConfirm(selectedItem)} disable={false} />
+                        <FormButton text="Confirmar plan" type="primary" onPressAction={() => onConfirm(selectedItem)} disable={selectedItem ? false : true} />
                 }
                 <GoBackButton />
             </View>
