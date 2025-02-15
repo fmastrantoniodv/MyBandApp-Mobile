@@ -13,7 +13,7 @@ import { FormInput } from './FormInput';
 import { inputsLogin } from '../../constants';
 
 export const FormLogin = () => {
-  const { control, handleSubmit, formState: { errors } } = useForm();
+  const { control, handleSubmit, formState: { errors, isValid } } = useForm();
   const { saveUserData } = useUser()
   const [textBody, setTextBody] = useState('')
   const [isOpenModal, openModal, closeModal] = useModal(false)
@@ -68,8 +68,8 @@ export const FormLogin = () => {
               }}
               />
             )})}
-          <Link href="/forgotPass" className='text-black text-center text-lg mb-7'>Olvide mi contraseña</Link>
-          <FormButton text="Ingresar" type="primary" onPressAction={handleSubmit(onSubmit)} />
+          <Link href="/forgotPass" className='text-black text-center text-lg mb-7'>Olvidé mi contraseña</Link>
+          <FormButton text="Ingresar" type="primary" disable={isValid ? false : true} onPressAction={handleSubmit(onSubmit)} />
           <FormButton text="Registrarse" type="secondary" onPressAction={() => {router.push('/register')}} />
         </View>
       </View>

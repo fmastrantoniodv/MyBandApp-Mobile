@@ -51,12 +51,12 @@ export const UserProvider = ({ children }) => {
 
     const updateFavFunc = async (sampleId, actionCode, sampleObj) => {
         try {
-            const resUpdateFav = await updateFav(user.id, sampleId, actionCode)
-            if(actionCode === 'UNFAV'){
-              setFavs(favs.filter(fav => fav.id !== sampleId))
-            }else if(actionCode === 'FAV'){
-              setFavs(prevFavs => [...prevFavs, sampleObj])
-            }
+          if(actionCode === 'UNFAV'){
+            setFavs(favs.filter(fav => fav.id !== sampleId))
+          }else if(actionCode === 'FAV'){
+            setFavs(prevFavs => [...prevFavs, sampleObj])
+          }
+          const resUpdateFav = updateFav(user.id, sampleId, actionCode)
             if(resUpdateFav.status && resUpdateFav.status !== 200) throw new Error(resUpdateFav.errorDetail)
             return 'SUCCESS'
         } catch (error) {
